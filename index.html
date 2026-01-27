@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCHANID</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --border: #1a1a1a;
+            --text: #ffffff;
+            --text-secondary: #888888;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            cursor: none;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+            mix-blend-mode: difference;
+        }
+        
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: white;
+        }
+        
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.15s ease-out;
+        }
+        
+        .cursor-outline.hover {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Noise Texture */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Scroll Sequence */
+        .scroll-container {
+            position: relative;
+            height: 400vh;
+        }
+
+        .scroll-pinned {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .sequence-line {
+            position: absolute;
+            text-align: center;
+            padding: 0 2rem;
+            font-size: clamp(1.5rem, 5vw, 4rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            pointer-events: none;
+        }
+
+        .sequence-line.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sequence-line.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        /* Minimal progress */
+        .progress-indicator {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 1px;
+            background: #222;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: white;
+            transition: width 0.1s linear;
+        }
+
+        /* Cards */
+        .feature-card {
+            background: transparent;
+            border: 1px solid var(--border);
+            transition: all 0.4s ease;
+        }
+        
+        .feature-card:hover {
+            border-color: #444;
+            background: rgba(255,255,255,0.02);
+        }
+        
+        /* Magnetic */
+        .magnetic {
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        /* Line animation */
+        .reveal-line {
+            clip-path: inset(0 0 100% 0);
+            transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        
+        .reveal-line.visible {
+            clip-path: inset(0 0 0 0);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+    
+    <!-- Noise -->
+    <div class="noise"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-6 mix-blend-difference opacity-0 transition-opacity duration-700" id="navbar">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="font-display font-bold text-sm tracking-widest cursor-none magnetic">
+                ARCHANID
+            </a>
+            
+            <div class="flex items-center gap-6">
+                <a href="https://discord.gg/fe46sJY8KF" target="_blank" 
+                   class="text-sm text-neutral-500 hover:text-white transition-colors cursor-none magnetic">
+                    Support
+                </a>
+                <a href="https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" 
+                   class="px-5 py-2 border border-white/20 rounded-full text-sm hover:bg-white hover:text-black transition-all duration-300 cursor-none magnetic">
+                    Add to Server
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Scroll Sequence -->
+    <div class="scroll-container" id="sequence-wrapper">
+        <div class="scroll-pinned bg-black">
+            
+            <!-- Slide 1 -->
+            <div class="sequence-line font-display active" data-index="0">
+                Your server<br>deserves perfection.
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="sequence-line font-display" data-index="1">
+                Server Architect,<br>Music, Economy, AI.
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="sequence-line font-display" data-index="2">
+                One bot.<br>Infinite possibilities.
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="sequence-line font-display" data-index="3" style="font-size: clamp(3rem, 10vw, 8rem); letter-spacing: -0.04em;">
+                ARCHANID
+            </div>
+
+            <div class="progress-indicator">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="relative bg-black">
+        
+        <!-- Hero -->
+        <section class="min-h-screen flex items-center justify-center px-6 border-t border-neutral-900/50">
+            <div class="max-w-4xl mx-auto text-center">
+                
+                <p class="text-neutral-600 text-sm uppercase tracking-widest mb-8 reveal-line" id="tagline">
+                    The Ultimate Discord Architect
+                </p>
+                
+                <h1 class="font-display text-5xl md:text-8xl font-medium mb-8 tracking-tight reveal-line" style="transition-delay: 0.1s;" id="main-title">
+                    ARCHANID
+                </h1>
+                
+                <p class="text-neutral-500 text-lg md:text-xl max-w-xl mx-auto mb-12 leading-relaxed reveal-line" style="transition-delay: 0.2s;" id="desc">
+                    Build your server with the visual Wizard. Experience high-fidelity music with Last.fm integration. Manage your community with automated moderation and global economy.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal-line" style="transition-delay: 0.3s;" id="buttons">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" 
+                       class="group px-8 py-4 bg-white text-black rounded-full font-medium cursor-none magnetic inline-flex items-center gap-2 hover:bg-neutral-200 transition-colors">
+                        Invite Bot
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                    <a href="https://discord.gg/fe46sJY8KF" target="_blank" 
+                       class="px-8 py-4 border border-neutral-800 rounded-full font-medium hover:border-neutral-600 transition-colors cursor-none magnetic text-neutral-300">
+                        Join Support
+                    </a>
+                </div>
+
+                <div class="mt-20 flex items-center justify-center gap-8 text-neutral-700 text-sm reveal-line" style="transition-delay: 0.4s;" id="meta">
+                    <span class="flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                        Operational
+                    </span>
+                    <span>Server Architect</span>
+                    <span>Slash Commands</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="py-32 px-6 border-t border-neutral-900">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <div class="feature-card rounded-2xl p-8 cursor-none group">
+                        <div class="mb-8 text-neutral-600 group-hover:text-white transition-colors duration-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-lg font-medium mb-3">Hi-Fi Music</h3>
+                        <p class="text-neutral-600 text-sm leading-relaxed">SoundCloud & Bandcamp integration with Last.fm scrobbling, artist charts, and advanced audio filters.</p>
+                    </div>
+
+                    <div class="feature-card rounded-2xl p-8 cursor-none group">
+                        <div class="mb-8 text-neutral-600 group-hover:text-white transition-colors duration-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-lg font-medium mb-3">Server Architect</h3>
+                        <p class="text-neutral-600 text-sm leading-relaxed">Design your entire server layout visually. Create channels, roles, and permissions in seconds with the Wizard.</p>
+                    </div>
+
+                    <div class="feature-card rounded-2xl p-8 cursor-none group">
+                        <div class="mb-8 text-neutral-600 group-hover:text-white transition-colors duration-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-lg font-medium mb-3">Moderation</h3>
+                        <p class="text-neutral-600 text-sm leading-relaxed">Advanced auto-mod, detailed logging, ticket systems, and seamless user verification flow.</p>
+                    </div>
+
+                    <div class="feature-card rounded-2xl p-8 cursor-none group">
+                        <div class="mb-8 text-neutral-600 group-hover:text-white transition-colors duration-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-lg font-medium mb-3">Social & Levels</h3>
+                        <p class="text-neutral-600 text-sm leading-relaxed">Engaging leveling system, reputation tracking, customizable profiles, and social interactions.</p>
+                    </div>
+
+                    <div class="feature-card rounded-2xl p-8 cursor-none group">
+                        <div class="mb-8 text-neutral-600 group-hover:text-white transition-colors duration-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-lg font-medium mb-3">Global Economy</h3>
+                        <p class="text-neutral-600 text-sm leading-relaxed">Comprehensive economy with global currency, trading, player shops, and market simulation.</p>
+                    </div>
+
+                    <div class="feature-card rounded-2xl p-8 cursor-none group">
+                        <div class="mb-8 text-neutral-600 group-hover:text-white transition-colors duration-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-lg font-medium mb-3">Utilities</h3>
+                        <p class="text-neutral-600 text-sm leading-relaxed">Sticky messages, reminders, detailed server stats, and powerful configuration tools.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-neutral-900 py-12 px-6">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-8">
+                    <span class="font-display font-bold text-sm tracking-widest">ARCHANID</span>
+                    <div class="flex gap-6 text-sm text-neutral-600">
+                        <a href="https://privacyarcahnid.netlify.app/" target="_blank" class="hover:text-white transition-colors cursor-none">Privacy</a>
+                        <a href="https://kblhaqjtik51kjxb.vercel.app" target="_blank" class="hover:text-white transition-colors cursor-none">Terms</a>
+                        <a href="https://discord.gg/fe46sJY8KF" target="_blank" class="hover:text-white transition-colors cursor-none">Support</a>
+                    </div>
+                </div>
+                <div class="text-sm text-neutral-700" id="year"></div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Cursor
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            outline.style.left = e.clientX + 'px';
+            outline.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button, .cursor-none').forEach(el => {
+            el.addEventListener('mouseenter', () => outline.classList.add('hover'));
+            el.addEventListener('mouseleave', () => outline.classList.remove('hover'));
+        });
+
+        // Magnetic
+        document.querySelectorAll('.magnetic').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0, 0)');
+        });
+
+        // Scroll Sequence
+        const lines = document.querySelectorAll('.sequence-line');
+        const progressBar = document.getElementById('progress-bar');
+        const navbar = document.getElementById('navbar');
+        const totalLines = lines.length;
+
+        // First line visible immediately
+        lines[0].classList.add('active');
+
+        ScrollTrigger.create({
+            trigger: "#sequence-wrapper",
+            start: "top top",
+            end: "bottom bottom",
+            pin: ".scroll-pinned",
+            scrub: 0.8,
+            onUpdate: (self) => {
+                const progress = self.progress;
+                progressBar.style.width = (progress * 100) + '%';
+                
+                // Calculate current index (0 to totalLines-1)
+                const currentIndex = Math.min(Math.floor(progress * totalLines), totalLines - 1);
+                
+                lines.forEach((line, index) => {
+                    if (index === currentIndex) {
+                        line.classList.add('active');
+                        line.classList.remove('fade-out');
+                    } else if (index < currentIndex) {
+                        line.classList.remove('active');
+                        line.classList.add('fade-out');
+                    } else {
+                        line.classList.remove('active', 'fade-out');
+                    }
+                });
+                
+                // Show navbar near end
+                navbar.style.opacity = progress > 0.8 ? '1' : '0';
+            }
+        });
+
+        // Main content reveals
+        const revealElements = document.querySelectorAll('.reveal-line');
+        revealElements.forEach(el => {
+            ScrollTrigger.create({
+                trigger: el,
+                start: "top 85%",
+                onEnter: () => el.classList.add('visible'),
+                once: true
+            });
+        });
+
+        // Year
+        document.getElementById('year').textContent = `© ${new Date().getFullYear()}`;
+    </script>
+</body>
+</html>
