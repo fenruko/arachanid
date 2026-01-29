@@ -1,25 +1,14 @@
 # Archanid
 
-Welcome to the official documentation for **Archanid**, the high-performance Discord bot that combines engineering, entertainment, and economy into one powerful system.
+Welcome to the official documentation for **Archanid**, the high-performance Discord bot for server architecture, music, and global economy.
 
-## Why Archanid?
+## Features
+- **Server Architect:** Build complex server layouts in seconds.
+- **Hi-Fi Music:** High-quality streaming from SoundCloud and Bandcamp.
+- **Global Economy:** Cross-server currency, shops, and trading.
+- **Advanced Moderation:** Intelligent auto-mod and verification.
 
-Most Discord bots do one thing well. Archanid is designed to be the **Operating System** for your server.
-
-*   **🏗️ Architect:** Don't just make channels. **Build** a server infrastructure visually in seconds.
-*   **🎵 Hi-Fi Audio:** Stream music from Spotify, SoundCloud, and Bandcamp with professional DSP filters.
-*   **💰 Global Economy:** A unified currency system that follows users across every server.
-*   **🛡️ Ironclad Security:** Advanced moderation, timed bans, and strict permission hierarchies.
-
-## Quick Start
-
-If you just invited the bot, jump straight to the **[Setup Guide](getting-started/setup.md)** to learn how to use the Wizard.
-
-[Get Started](getting-started/setup.md){ .md-button .md-button--primary } [View Commands](commands.md){ .md-button }
-
-## Support
-
-Need help that this wiki doesn't cover?
-
-*   **[Official Support Server](https://discord.gg/fe46sJY8KF):** Talk to the developers.
-*   **[Top.gg Page](https://top.gg/bot/1329184069426348052):** Vote for the bot to support development.
+## Quick Links
+- [Invite the Bot](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=8&scope=bot+applications.commands)
+- [Support Server](https://discord.gg/fe46sJY8KF)
+- [Top.gg Page](https://top.gg/bot/1329184069426348052)

@@ -1,22 +1,31 @@
 site_name: Archanid Docs
 site_description: The ultimate Discord Architect, Music, and Economy bot.
 site_author: fenruko
+site_url: https://arachanid.readthedocs.io/
 
 theme:
   name: material
+  custom_dir: docs/overrides
   palette:
-<<<<<<< HEAD
     scheme: slate
-=======
-    scheme: slate # Matches your dark aesthetic
->>>>>>> 6bbac66ee9f422147223e7883ee1f47608569158
     primary: black
     accent: purple
+  font:
+    text: Inter
+    code: JetBrains Mono
   features:
     - navigation.tabs
     - navigation.sections
+    - navigation.instant
+    - navigation.tracking
     - toc.integrate
+    - search.suggest
+    - search.highlight
     - content.code.copy
+    - content.tabs.link
+
+extra_css:
+  - assets/custom.css
 
 nav:
   - Home: index.md
@@ -41,3 +50,6 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
