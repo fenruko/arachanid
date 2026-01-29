@@ -1,0 +1,39 @@
+site_name: Archanid Docs
+site_description: The ultimate Discord Architect, Music, and Economy bot.
+site_author: fenruko
+
+theme:
+  name: material
+  palette:
+    scheme: slate # Matches your dark aesthetic
+    primary: black
+    accent: purple
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Setup Guide: getting-started/setup.md
+    - Configuration: getting-started/configuration.md
+  - Features:
+    - Server Architect: features/architect.md
+    - Hi-Fi Music: features/music.md
+    - Global Economy: features/economy.md
+    - Moderation: features/moderation.md
+  - Reference:
+    - Commands List: commands.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
