@@ -4,7 +4,7 @@ Follow these steps to get Archanid up and running in your server perfectly.
 
 ## 1. Invite the Bot
 Use the official invite link to add Archanid to your server with the required permissions:
-[Invite Archanid](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=8&scope=bot+applications.commands)
+[Invite Archanid](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot)
 
 ## 2. Initial Configuration
 Once the bot joins, it is highly recommended to set up the **Server Architect** first.

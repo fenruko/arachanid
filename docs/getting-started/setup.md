@@ -9,7 +9,7 @@ To get started, you need to invite Archanid to your server.
 !!! tip "Permissions"
     Archanid requires **Administrator** permissions to function correctly as a "Server Architect". It needs to create channels, manage roles, and moderate users.
 
-[**Click here to Invite Archanid**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=8&scope=bot+applications.commands){ .md-button .md-button--primary }
+[**Click here to Invite Archanid**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot){ .md-button .md-button--primary }
 
 1.  Select your server from the dropdown menu.
 2.  Click **Authorize**.
