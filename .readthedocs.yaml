@@ -6,16 +6,8 @@ build:
     python: "3.11"
 
 mkdocs:
-<<<<<<< HEAD
   configuration: website/mkdocs.yml
 
 python:
   install:
     - requirements: website/docs/requirements_docs.txt
-=======
-  configuration: mkdocs.yml
-
-python:
-  install:
-    - requirements: docs/requirements_docs.txt
->>>>>>> 6bbac66ee9f422147223e7883ee1f47608569158
