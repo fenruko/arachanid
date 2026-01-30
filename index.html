@@ -301,6 +301,24 @@
             transform: scale(1.1);
         }
         
+        /* Scroll Arrow */
+        .scroll-arrow {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            opacity: 0.7;
+            animation: bounce 2s ease-in-out infinite;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
         /* Pulse animation */
         .pulse-dot {
             animation: pulse 2s ease-in-out infinite;
@@ -386,6 +404,13 @@
 
             <div class="progress-indicator">
                 <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <!-- Scroll Arrow -->
+            <div class="scroll-arrow" id="scroll-arrow">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
             </div>
         </div>
     </div>
@@ -618,6 +643,18 @@
         // Year
         document.getElementById('year').textContent = `© ${new Date().getFullYear()}`;
         
+        // Scroll arrow fade animation
+        gsap.to("#scroll-arrow", {
+            opacity: 0,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#sequence-wrapper",
+                start: "top top",
+                end: "80% top",
+                scrub: true
+            }
+        });
+
         // Parallax
         gsap.to(".orb-1", {
             y: 200,
