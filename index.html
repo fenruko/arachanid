@@ -546,7 +546,7 @@
                 <div class="flex items-center gap-8">
                     <span class="font-display font-bold text-sm tracking-widest glow-text">ARCHANID</span>
                     <div class="flex gap-6 text-sm text-neutral-500">
-                        <a href="https://privacyarcahnid.netlify.app/" target="_blank" class="hover:text-white transition-colors">Privacy</a>
+                        <a href="#" id="privacy-trigger" class="hover:text-white transition-colors">Privacy</a>
                         <a href="https://kblhaqjtik51kjxb.vercel.app" target="_blank" class="hover:text-white transition-colors">Terms</a>
                         <a href="https://discord.gg/fe46sJY8KF" target="_blank" class="hover:text-white transition-colors">Support</a>
                     </div>
@@ -556,8 +556,118 @@
         </footer>
     </main>
 
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="fixed inset-0 z-[9999] hidden opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="privacy-backdrop"></div>
+        
+        <!-- Content -->
+        <div class="relative w-full h-full flex items-center justify-center p-4">
+            <div class="bg-black/90 border border-white/10 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto relative transform scale-95 transition-transform duration-300" id="privacy-content">
+                
+                <button id="privacy-close" class="absolute top-4 right-4 text-neutral-500 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+
+                <div class="p-8 md:p-12">
+                    <h2 class="font-display text-3xl font-bold mb-8">Privacy Policy</h2>
+                    
+                    <div class="space-y-6 text-neutral-400 text-sm leading-relaxed">
+                        <p class="font-medium text-white">Last updated: February 2026</p>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">1. Introduction</h3>
+                            <p>Archanid ("we", "us", or "our") values your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our Discord bot and services.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">2. Data We Collect</h3>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>User Data:</strong> Discord User IDs, usernames, and avatars to identify users and track economy/leveling progress.</li>
+                                <li><strong>Server Data:</strong> Guild IDs, channel IDs, and role IDs for configuration and settings.</li>
+                                <li><strong>Usage Data:</strong> Command usage statistics and error logs to improve service stability.</li>
+                                <li><strong>Message Content:</strong> We do not persistently store message content. Messages may be temporarily processed for auto-moderation commands but are discarded immediately after processing.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">3. How We Use Data</h3>
+                            <p>We use the collected data to:</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Provide core bot functionality (economy, leveling, moderation).</li>
+                                <li>Maintain user preferences and server configurations.</li>
+                                <li>Ensure the security and stability of our services.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">4. Data Storage & Security</h3>
+                            <p>Data is stored securely in our databases. We take reasonable measures to protect your information from unauthorized access, alteration, or destruction.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">5. Data Sharing</h3>
+                            <p>We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties. This does not include trusted third parties who assist us in operating our website or serving you (e.g., hosting providers), so long as those parties agree to keep this information confidential.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">6. Your Rights</h3>
+                            <p>You have the right to request access to, correction of, or deletion of your personal data. To request data deletion, please join our <a href="https://discord.gg/fe46sJY8KF" class="text-white underline hover:no-underline">Support Server</a> and open a ticket.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         gsap.registerPlugin(ScrollTrigger);
+
+        // Privacy Modal Logic
+        const privacyTrigger = document.getElementById('privacy-trigger');
+        const privacyModal = document.getElementById('privacy-modal');
+        const privacyBackdrop = document.getElementById('privacy-backdrop');
+        const privacyClose = document.getElementById('privacy-close');
+        const privacyContent = document.getElementById('privacy-content');
+
+        function openPrivacy() {
+            privacyModal.classList.remove('hidden');
+            // Small delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                privacyModal.classList.remove('opacity-0');
+                privacyContent.classList.remove('scale-95');
+                privacyContent.classList.add('scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closePrivacy() {
+            privacyModal.classList.add('opacity-0');
+            privacyContent.classList.remove('scale-100');
+            privacyContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                privacyModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        privacyTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            openPrivacy();
+        });
+
+        privacyClose.addEventListener('click', closePrivacy);
+        privacyBackdrop.addEventListener('click', closePrivacy);
+
+        // Escape key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !privacyModal.classList.contains('hidden')) {
+                closePrivacy();
+            }
+        });
 
         // Magnetic Buttons
         document.querySelectorAll('.magnetic').forEach(btn => {
