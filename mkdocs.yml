@@ -6,9 +6,19 @@ site_url: https://arachanid.readthedocs.io/
 theme:
   name: material
   palette:
-    scheme: slate
-    primary: black
-    accent: purple
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: black
+      accent: purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to Light Mode
+    - scheme: default
+      primary: black
+      accent: purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to Dark Mode
   font:
     text: Inter
     code: JetBrains Mono
@@ -22,6 +32,7 @@ theme:
     - search.highlight
     - content.code.copy
     - content.tabs.link
+    - content.tooltips
 
 extra_css:
   - assets/custom.css
@@ -29,15 +40,17 @@ extra_css:
 nav:
   - Home: index.md
   - Getting Started:
-    - Setup Guide: getting-started/setup.md
-    - Configuration: getting-started/configuration.md
-  - Features:
-    - Server Architect: features/architect.md
-    - Hi-Fi Music: features/music.md
-    - Global Economy: features/economy.md
-    - Moderation: features/moderation.md
+    - Installation: getting-started/installation.md
+    - The Architect Wizard: getting-started/architect.md
+  - Modules:
+    - Server Architect: modules/architect.md
+    - Hi-Fi Music: modules/music.md
+    - Global Economy: modules/economy.md
+    - Moderation: modules/moderation.md
+    - Social & Leveling: modules/social.md
   - Reference:
-    - Commands List: commands.md
+    - Command List: reference/commands.md
+    - Glossary: reference/glossary.md
 
 markdown_extensions:
   - admonition
@@ -45,7 +58,11 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.details
