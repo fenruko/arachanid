@@ -547,7 +547,7 @@
                     <span class="font-display font-bold text-sm tracking-widest glow-text">ARCHANID</span>
                     <div class="flex gap-6 text-sm text-neutral-500">
                         <a href="#" id="privacy-trigger" class="hover:text-white transition-colors">Privacy</a>
-                        <a href="https://kblhaqjtik51kjxb.vercel.app" target="_blank" class="hover:text-white transition-colors">Terms</a>
+                        <a href="#" id="terms-trigger" class="hover:text-white transition-colors">Terms</a>
                         <a href="https://discord.gg/fe46sJY8KF" target="_blank" class="hover:text-white transition-colors">Support</a>
                     </div>
                 </div>
@@ -622,6 +622,68 @@
         </div>
     </div>
 
+    <!-- Terms of Service Modal -->
+    <div id="terms-modal" class="fixed inset-0 z-[9999] hidden opacity-0 transition-opacity duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="terms-backdrop"></div>
+        
+        <!-- Content -->
+        <div class="relative w-full h-full flex items-center justify-center p-4">
+            <div class="bg-black/90 border border-white/10 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto relative transform scale-95 transition-transform duration-300" id="terms-content">
+                
+                <button id="terms-close" class="absolute top-4 right-4 text-neutral-500 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+
+                <div class="p-8 md:p-12">
+                    <h2 class="font-display text-3xl font-bold mb-8">Terms of Service</h2>
+                    
+                    <div class="space-y-6 text-neutral-400 text-sm leading-relaxed">
+                        <p class="font-medium text-white">Last updated: February 2026</p>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">1. Acceptance of Terms</h3>
+                            <p>By inviting Archanid ("the Bot") to your Discord server or using its features, you agree to be bound by these Terms of Service. If you do not agree, you may not use the Bot.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">2. Usage License</h3>
+                            <p>We grant you a limited, non-exclusive, non-transferable license to use Archanid for personal, non-commercial purposes within the Discord platform, subject to these Terms.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">3. User Conduct</h3>
+                            <p>You agree not to use the Bot to:</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Violate Discord's Terms of Service or Community Guidelines.</li>
+                                <li>Promote illegal activities, hate speech, or harassment.</li>
+                                <li>Exploit bugs or vulnerabilities (please report them instead).</li>
+                                <li>Spam commands or intentionally degrade the Bot's performance.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">4. Availability & Service</h3>
+                            <p>We strive to maintain high availability but do not guarantee 100% uptime. We reserve the right to modify, suspend, or discontinue any part of the service at any time without notice.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">5. Termination</h3>
+                            <p>We reserve the right to ban any user or server from using Archanid at our sole discretion, without prior notice, for violation of these Terms or for any other reason.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-white font-medium mb-2">6. Disclaimer</h3>
+                            <p>The Bot is provided "as is" without warranty of any kind. We are not liable for any damages arising from the use or inability to use the Bot.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
@@ -666,6 +728,48 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !privacyModal.classList.contains('hidden')) {
                 closePrivacy();
+            }
+        });
+
+        // Terms Modal Logic
+        const termsTrigger = document.getElementById('terms-trigger');
+        const termsModal = document.getElementById('terms-modal');
+        const termsBackdrop = document.getElementById('terms-backdrop');
+        const termsClose = document.getElementById('terms-close');
+        const termsContent = document.getElementById('terms-content');
+
+        function openTerms() {
+            termsModal.classList.remove('hidden');
+            setTimeout(() => {
+                termsModal.classList.remove('opacity-0');
+                termsContent.classList.remove('scale-95');
+                termsContent.classList.add('scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTerms() {
+            termsModal.classList.add('opacity-0');
+            termsContent.classList.remove('scale-100');
+            termsContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                termsModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        termsTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            openTerms();
+        });
+
+        termsClose.addEventListener('click', closeTerms);
+        termsBackdrop.addEventListener('click', closeTerms);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !termsModal.classList.contains('hidden')) {
+                closeTerms();
             }
         });
 
