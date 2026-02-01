@@ -6,7 +6,7 @@ Setting up Archanid is straightforward. Follow this guide to ensure the bot has 
 
 Click the button below to invite Archanid to your server.
 
-[**Invite Archanid**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot){ .md-button .md-button--primary }
+[**Invite Archanid**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot)
 
 !!! warning "Critical Permissions"
     Archanid acts as a **Server Architect**. This means it needs to modify channels, manage roles, and delete messages. 
@@ -35,4 +35,4 @@ Before opening your server to the public, run the **Architect Wizard**.
 *   **Command:** `/wizard`
 *   **Goal:** Create necessary channels (e.g., `mod-logs`, `music`, `general`).
 
-[**Next: The Architect Wizard**](architect.md){ .md-button .md-button--primary }
+[**Next: The Architect Wizard**](architect.md)

@@ -22,5 +22,5 @@ Automated security, timed bans, logging, and a robust verification system.
 
 Get your server running in minutes.
 
-[Invite Archanid](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot){ .md-button .md-button--primary }
-[Setup Guide](getting-started/installation.md){ .md-button }
+[**Invite Archanid**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot)
+[**Setup Guide**](getting-started/installation.md)
