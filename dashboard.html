@@ -11,10 +11,12 @@
 <body>
     <div class="app-container">
         <!-- Sidebar -->
-        <nav class="sidebar">
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+        <nav class="sidebar" id="sidebar">
             <div class="brand">
                 <i class="fa-solid fa-spider"></i>
                 <span>Archanid</span>
+                <button class="close-sidebar-btn" onclick="toggleSidebar()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div class="menu">
@@ -51,8 +53,11 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="top-bar">
-                <div class="page-title">
-                    <h1 id="pageTitle">Overview</h1>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button class="menu-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+                    <div class="page-title">
+                        <h1 id="pageTitle">Overview</h1>
+                    </div>
                 </div>
                 <div class="status-indicator">
                     <span class="status-dot"></span>
@@ -127,7 +132,17 @@
                             </div>
                         </div>
 
+                        <!-- Lyrics Modal -->
+                        <div id="lyricsModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close-modal" onclick="closeLyrics()">&times;</span>
+                                <h2 id="lyricsTitle">Lyrics</h2>
+                                <div id="lyricsText" class="lyrics-text">Loading...</div>
+                            </div>
+                        </div>
+
                         <div class="controls">
+                            <button class="control-btn sm" onclick="toggleLyrics()" title="Lyrics"><i class="fa-solid fa-microphone-lines"></i></button>
                             <button class="control-btn sm" onclick="musicAction('shuffle')"><i class="fa-solid fa-shuffle"></i></button>
                             <button class="control-btn" onclick="musicAction('prev')"><i class="fa-solid fa-backward-step"></i></button>
                             <button class="control-btn lg" onclick="musicAction('toggle')"><i class="fa-solid fa-play" id="playPauseIcon"></i></button>
@@ -164,29 +179,59 @@
 
                 <!-- Settings Tab -->
                 <div id="settings" class="tab-content">
-                    <div class="music-player-container"> <!-- Reuse container style -->
-                        <h2>Dashboard Settings</h2>
-                        <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 15px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                    <div class="music-player-container">
+                        <h2 id="settingsTitle">Select a Server to Configure</h2>
+                        
+                        <div id="configForm" style="display:none; margin-top:20px;">
+                            <div class="form-group">
+                                <label>Command Prefix</label>
+                                <input type="text" id="prefixInput" placeholder="!" maxlength="5">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Welcome Channel ID</label>
+                                <input type="number" id="welcomeChannelInput" placeholder="1234567890">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Modules</label>
+                                <div class="toggle-group">
+                                    <div class="toggle-item">
+                                        <span>Leveling</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="modLeveling">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="toggle-item">
+                                        <span>Economy</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="modEconomy">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="toggle-item">
+                                        <span>Moderation</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="modModeration">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onclick="saveServerSettings()" class="save-btn">Save Changes</button>
+                        </div>
+
+                        <!-- Global Dashboard Settings -->
+                        <div style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px;">
+                            <h3>Dashboard Preferences</h3>
+                            <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
                                 <span>Theme Color</span>
                                 <select style="padding: 5px; background: #222; color: white; border: 1px solid #444; border-radius: 4px;">
                                     <option>Default (Black Gradient)</option>
                                     <option>Light (Coming Soon)</option>
                                 </select>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                                <span>Auto-Refresh Rate</span>
-                                <select id="refreshRate" style="padding: 5px; background: #222; color: white; border: 1px solid #444; border-radius: 4px;">
-                                    <option value="1000">Fast (1s)</option>
-                                    <option value="3000" selected>Normal (3s)</option>
-                                    <option value="5000">Slow (5s)</option>
-                                </select>
-                            </div>
-                            <div style="padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
-                                <p style="font-size: 14px; color: #aaa; margin-bottom: 10px;">User Data</p>
-                                <button onclick="localStorage.clear(); location.reload();" style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                    Reset Local Data
-                                </button>
                             </div>
                         </div>
                     </div>

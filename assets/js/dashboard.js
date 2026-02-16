@@ -1,5 +1,5 @@
 // CONFIGURATION
-const API_BASE_URL = "https://admit-matching-keyword-guitar.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
+const API_BASE_URL = "https://months-prototype-humans-factor.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
 const CLIENT_ID = "1329184069426348052"; 
 
 // State
@@ -94,6 +94,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }, parseInt(rate));
 });
 
+// Mobile Sidebar Toggle
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+    if (sidebar && overlay) {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+}
+
 function switchTab(tabName) {
     document.querySelectorAll('.menu-item').forEach(t => {
         if (t.getAttribute('data-tab') === tabName) t.classList.add('active');
@@ -112,6 +122,13 @@ function switchTab(tabName) {
     
     // Refresh specific tab data immediately
     if (tabName === 'servers') renderServerGrid();
+    if (tabName === 'settings') loadServerSettings();
+
+    // Close sidebar on mobile
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar && sidebar.classList.contains('active')) {
+        toggleSidebar();
+    }
 }
 
 // --- AUTHENTICATION ---
@@ -240,7 +257,98 @@ function selectServer(guildId) {
     const select = document.getElementById('serverSelect');
     if (select) select.value = guildId;
 
-    switchTab('music');
+    switchTab('settings'); // Go directly to settings when clicking from Server Grid
+}
+
+// --- LYRICS & SETTINGS ---
+
+function toggleLyrics() {
+    const modal = document.getElementById('lyricsModal');
+    if (modal.style.display === 'block') {
+        closeLyrics();
+    } else {
+        openLyrics();
+    }
+}
+
+function closeLyrics() {
+    document.getElementById('lyricsModal').style.display = 'none';
+}
+
+async function openLyrics() {
+    if (!selectedGuildId) return alert("Select a server first!");
+    
+    document.getElementById('lyricsModal').style.display = 'block';
+    document.getElementById('lyricsText').textContent = "Fetching lyrics...";
+    
+    try {
+        const res = await fetch(`${API_BASE_URL}/music/lyrics?guild_id=${selectedGuildId}`);
+        const data = await res.json();
+        
+        if (data.error) {
+            document.getElementById('lyricsText').textContent = "Error: " + data.error;
+        } else {
+            document.getElementById('lyricsTitle').textContent = data.title ? `${data.title} - ${data.artist}` : "Lyrics";
+            document.getElementById('lyricsText').textContent = data.lyrics;
+        }
+    } catch (e) {
+        document.getElementById('lyricsText').textContent = "Failed to load lyrics.";
+    }
+}
+
+async function loadServerSettings() {
+    if (!selectedGuildId) {
+        document.getElementById('settingsTitle').textContent = "Select a Server to Configure";
+        document.getElementById('configForm').style.display = 'none';
+        return;
+    }
+    
+    const guild = userGuildsCache.find(g => g.id === selectedGuildId);
+    if (guild) document.getElementById('settingsTitle').textContent = `Configuring: ${guild.name}`;
+    document.getElementById('configForm').style.display = 'block';
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/settings/${selectedGuildId}`);
+        const data = await res.json();
+        
+        document.getElementById('prefixInput').value = data.prefix || "!";
+        document.getElementById('welcomeChannelInput').value = data.welcome_channel || "";
+        
+        document.getElementById('modLeveling').checked = data.modules.leveling;
+        document.getElementById('modEconomy').checked = data.modules.economy;
+        document.getElementById('modModeration').checked = data.modules.moderation;
+        
+    } catch (e) {
+        console.error("Failed to load settings", e);
+    }
+}
+
+async function saveServerSettings() {
+    if (!selectedGuildId) return;
+    
+    const payload = {
+        prefix: document.getElementById('prefixInput').value,
+        welcome_channel: document.getElementById('welcomeChannelInput').value,
+        modules: {
+            leveling: document.getElementById('modLeveling').checked,
+            economy: document.getElementById('modEconomy').checked,
+            moderation: document.getElementById('modModeration').checked
+        }
+    };
+    
+    try {
+        const res = await fetch(`${API_BASE_URL}/settings/${selectedGuildId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        if (res.ok) alert("Settings saved!");
+        else alert("Failed to save settings.");
+        
+    } catch (e) {
+        alert("Error saving settings.");
+    }
 }
 
 // --- API INTERACTIONS ---
