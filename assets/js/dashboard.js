@@ -1,5 +1,5 @@
 // CONFIGURATION
-const API_BASE_URL = "https://tub-brilliant-perceived-rest.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
+const API_BASE_URL = "https://sisters-hearings-hart-reason.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
 const CLIENT_ID = "1329184069426348052"; 
 
 // State
