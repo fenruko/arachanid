@@ -45,10 +45,9 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Top Bar -->
             <header class="top-bar">
                 <div class="page-title">
-                    <h1 id="pageTitle">Dashboard</h1>
+                    <h1 id="pageTitle">Overview</h1>
                 </div>
                 <div class="status-indicator">
                     <span class="status-dot"></span>
@@ -56,7 +55,6 @@
                 </div>
             </header>
 
-            <!-- Content Area -->
             <div id="contentArea" class="content-area">
                 
                 <!-- Overview Tab -->
@@ -68,7 +66,7 @@
                             </div>
                             <div class="stat-info">
                                 <h3>Servers</h3>
-                                <p id="serverCount">Loading...</p>
+                                <p id="serverCount">...</p>
                             </div>
                         </div>
                         <div class="stat-card">
@@ -77,7 +75,7 @@
                             </div>
                             <div class="stat-info">
                                 <h3>Users</h3>
-                                <p id="userCount">Loading...</p>
+                                <p id="userCount">...</p>
                             </div>
                         </div>
                         <div class="stat-card">
@@ -86,7 +84,7 @@
                             </div>
                             <div class="stat-info">
                                 <h3>Latency</h3>
-                                <p id="pingCount">Loading...</p>
+                                <p id="pingCount">...</p>
                             </div>
                         </div>
                         <div class="stat-card">
@@ -95,16 +93,8 @@
                             </div>
                             <div class="stat-info">
                                 <h3>Shards</h3>
-                                <p id="shardCount">Loading...</p>
+                                <p id="shardCount">...</p>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="chart-container">
-                        <h2>Activity Header</h2>
-                        <div class="placeholder-chart">
-                            <!-- Chart.js canvas would go here -->
-                            <p>Real-time activity monitoring enabled</p>
                         </div>
                     </div>
                 </div>
@@ -116,7 +106,6 @@
                             <div class="server-selector">
                                 <select id="serverSelect">
                                     <option value="" disabled selected>Select a Server</option>
-                                    <!-- Populated by JS -->
                                 </select>
                             </div>
                             <div class="connection-status">
@@ -128,13 +117,12 @@
                         <div class="search-section" style="margin-bottom: 20px;">
                             <div style="display: flex; gap: 10px;">
                                 <input type="text" id="searchInput" placeholder="Search for songs..." 
-                                       style="flex:1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-dark); color: white;">
+                                       style="flex:1; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-dark); color: white;">
                                 <button onclick="searchMusic()" style="padding: 10px 20px; border-radius: 8px; background: var(--accent); color: white; border: none; cursor: pointer;">
                                     <i class="fa-solid fa-search"></i>
                                 </button>
                             </div>
-                            <div id="searchResults" style="margin-top: 10px; max-height: 200px; overflow-y: auto; background: var(--bg-dark); border-radius: 8px; display: none;">
-                                <!-- Search results go here -->
+                            <div id="searchResults" style="margin-top: 10px; max-height: 250px; overflow-y: auto; background: var(--bg-card); border-radius: 8px; display: none; border: 1px solid var(--border);">
                             </div>
                         </div>
 
@@ -148,10 +136,6 @@
                                 <div class="progress-bar-container">
                                     <div class="progress-bar" id="progressBar"></div>
                                 </div>
-                                <div class="time-codes">
-                                    <span id="currentTime">0:00</span>
-                                    <span id="totalTime">0:00</span>
-                                </div>
                             </div>
                         </div>
 
@@ -164,7 +148,7 @@
                         </div>
 
                         <div class="queue-section">
-                            <h3>Queue</h3>
+                            <h3>Up Next</h3>
                             <ul class="queue-list" id="queueList">
                                 <li class="empty-queue">Queue is empty</li>
                             </ul>
@@ -172,12 +156,12 @@
                     </div>
                 </div>
 
-                <!-- Servers Tab (Placeholder) -->
+                <!-- Servers Tab -->
                 <div id="servers" class="tab-content">
                     <div class="empty-state">
                         <i class="fa-solid fa-server"></i>
                         <h2>Server Management</h2>
-                        <p>Login to manage your servers.</p>
+                        <p>Login with Discord to manage your servers.</p>
                     </div>
                 </div>
 
