@@ -82,7 +82,7 @@ function switchTab(tabName) {
 // --- AUTHENTICATION ---
 
 function login() {
-    const redirectUri = encodeURIComponent("http://canva.xin/dashboard.html");
+    const redirectUri = encodeURIComponent("https://canva.xin/dashboard.html");
     const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=identify%20guilds`;
     window.location.href = url;
 }
