@@ -117,8 +117,8 @@ function switchTab(tabName) {
 // --- AUTHENTICATION ---
 
 function login() {
-    // Use http because mixed content block prevents https -> http API calls
-    const redirectUri = encodeURIComponent("http://canva.xin/dashboard.html");
+    // Use https to match GitHub Pages standard behavior
+    const redirectUri = encodeURIComponent("https://canva.xin/dashboard.html");
     const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=identify%20guilds`;
     window.location.href = url;
 }
