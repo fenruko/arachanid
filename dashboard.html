@@ -132,13 +132,10 @@
                             </div>
                         </div>
 
-                        <!-- Lyrics Modal -->
-                        <div id="lyricsModal" class="modal">
-                            <div class="modal-content">
-                                <span class="close-modal" onclick="closeLyrics()">&times;</span>
-                                <h2 id="lyricsTitle">Lyrics</h2>
-                                <div id="lyricsText" class="lyrics-text">Loading...</div>
-                            </div>
+                        <!-- Inline Lyrics Container -->
+                        <div id="lyricsContainer" class="lyrics-container" style="display: none;">
+                            <h3 id="lyricsTitle">Lyrics</h3>
+                            <div id="lyricsText" class="lyrics-text">Loading...</div>
                         </div>
 
                         <div class="controls">
@@ -190,7 +187,9 @@
                             
                             <div class="form-group">
                                 <label>Welcome Channel ID</label>
-                                <input type="number" id="welcomeChannelInput" placeholder="1234567890">
+                                <select id="welcomeChannelInput">
+                                    <option value="">Select a Channel</option>
+                                </select>
                             </div>
 
                             <div class="form-group">

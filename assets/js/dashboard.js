@@ -1,5 +1,5 @@
 // CONFIGURATION
-const API_BASE_URL = "https://months-prototype-humans-factor.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
+const API_BASE_URL = "https://symposium-signals-influence-involves.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
 const CLIENT_ID = "1329184069426348052"; 
 
 // State
@@ -263,8 +263,8 @@ function selectServer(guildId) {
 // --- LYRICS & SETTINGS ---
 
 function toggleLyrics() {
-    const modal = document.getElementById('lyricsModal');
-    if (modal.style.display === 'block') {
+    const container = document.getElementById('lyricsContainer');
+    if (container.style.display === 'block') {
         closeLyrics();
     } else {
         openLyrics();
@@ -272,27 +272,31 @@ function toggleLyrics() {
 }
 
 function closeLyrics() {
-    document.getElementById('lyricsModal').style.display = 'none';
+    document.getElementById('lyricsContainer').style.display = 'none';
 }
 
 async function openLyrics() {
     if (!selectedGuildId) return alert("Select a server first!");
     
-    document.getElementById('lyricsModal').style.display = 'block';
-    document.getElementById('lyricsText').textContent = "Fetching lyrics...";
+    const container = document.getElementById('lyricsContainer');
+    const textElem = document.getElementById('lyricsText');
+    const titleElem = document.getElementById('lyricsTitle');
+    
+    container.style.display = 'block';
+    textElem.textContent = "Fetching lyrics...";
     
     try {
         const res = await fetch(`${API_BASE_URL}/music/lyrics?guild_id=${selectedGuildId}`);
         const data = await res.json();
         
         if (data.error) {
-            document.getElementById('lyricsText').textContent = "Error: " + data.error;
+            textElem.textContent = "Error: " + data.error;
         } else {
-            document.getElementById('lyricsTitle').textContent = data.title ? `${data.title} - ${data.artist}` : "Lyrics";
-            document.getElementById('lyricsText').textContent = data.lyrics;
+            titleElem.textContent = data.title ? `Lyrics: ${data.title} - ${data.artist}` : "Lyrics";
+            textElem.textContent = data.lyrics;
         }
     } catch (e) {
-        document.getElementById('lyricsText').textContent = "Failed to load lyrics.";
+        textElem.textContent = "Failed to load lyrics.";
     }
 }
 
@@ -308,11 +312,34 @@ async function loadServerSettings() {
     document.getElementById('configForm').style.display = 'block';
 
     try {
+        // 1. Fetch Channels for Autofill
+        const channelRes = await fetch(`${API_BASE_URL}/channels/${selectedGuildId}`);
+        const channelData = await channelRes.json();
+        
+        const channelSelect = document.getElementById('welcomeChannelInput');
+        channelSelect.innerHTML = '<option value="">None / Disabled</option>';
+        
+        if (channelData.channels) {
+            channelData.channels.forEach(ch => {
+                const opt = document.createElement('option');
+                opt.value = ch.id;
+                opt.textContent = `#${ch.name}`;
+                channelSelect.appendChild(opt);
+            });
+        }
+
+        // 2. Fetch Existing Settings
         const res = await fetch(`${API_BASE_URL}/settings/${selectedGuildId}`);
         const data = await res.json();
         
         document.getElementById('prefixInput').value = data.prefix || "!";
-        document.getElementById('welcomeChannelInput').value = data.welcome_channel || "";
+        
+        // Pre-select current channel
+        if (data.welcome_channel) {
+            channelSelect.value = data.welcome_channel;
+        } else {
+            channelSelect.value = "";
+        }
         
         document.getElementById('modLeveling').checked = data.modules.leveling;
         document.getElementById('modEconomy').checked = data.modules.economy;
