@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archanid | Dashboard</title>
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-spider"></i>
+                <span>Archanid</span>
+            </div>
+            
+            <div class="menu">
+                <div class="menu-item active" data-tab="overview">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Overview</span>
+                </div>
+                <div class="menu-item" data-tab="servers">
+                    <i class="fa-solid fa-server"></i>
+                    <span>Servers</span>
+                </div>
+                <div class="menu-item" data-tab="music">
+                    <i class="fa-solid fa-music"></i>
+                    <span>Music Player</span>
+                </div>
+                <div class="menu-item" data-tab="settings">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </div>
+            </div>
+
+            <div class="user-profile" id="userProfile">
+                <button class="login-btn" onclick="login()">
+                    <i class="fa-brands fa-discord"></i> Login with Discord
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="page-title">
+                    <h1 id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span id="botStatus">System Online</span>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div id="contentArea" class="content-area">
+                
+                <!-- Overview Tab -->
+                <div id="overview" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="icon-box purple">
+                                <i class="fa-solid fa-server"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Servers</h3>
+                                <p id="serverCount">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon-box blue">
+                                <i class="fa-solid fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Users</h3>
+                                <p id="userCount">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon-box green">
+                                <i class="fa-solid fa-signal"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Latency</h3>
+                                <p id="pingCount">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon-box orange">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Shards</h3>
+                                <p id="shardCount">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h2>Activity Header</h2>
+                        <div class="placeholder-chart">
+                            <!-- Chart.js canvas would go here -->
+                            <p>Real-time activity monitoring enabled</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Music Tab -->
+                <div id="music" class="tab-content">
+                    <div class="music-player-container">
+                        <div class="player-header">
+                            <div class="server-selector">
+                                <select id="serverSelect">
+                                    <option value="" disabled selected>Select a Server</option>
+                                    <!-- Populated by JS -->
+                                </select>
+                            </div>
+                            <div class="connection-status">
+                                <i class="fa-solid fa-wifi"></i> <span id="musicConnection">Disconnected</span>
+                            </div>
+                        </div>
+
+                        <!-- Search Section -->
+                        <div class="search-section" style="margin-bottom: 20px;">
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="searchInput" placeholder="Search for songs..." 
+                                       style="flex:1; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-dark); color: white;">
+                                <button onclick="searchMusic()" style="padding: 10px 20px; border-radius: 8px; background: var(--accent); color: white; border: none; cursor: pointer;">
+                                    <i class="fa-solid fa-search"></i>
+                                </button>
+                            </div>
+                            <div id="searchResults" style="margin-top: 10px; max-height: 200px; overflow-y: auto; background: var(--bg-dark); border-radius: 8px; display: none;">
+                                <!-- Search results go here -->
+                            </div>
+                        </div>
+
+                        <div class="now-playing-card">
+                            <div class="album-art" id="albumArt">
+                                <i class="fa-solid fa-music"></i>
+                            </div>
+                            <div class="track-info">
+                                <h2 id="trackTitle">No Track Playing</h2>
+                                <p id="trackArtist">Select a server to view status</p>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="progressBar"></div>
+                                </div>
+                                <div class="time-codes">
+                                    <span id="currentTime">0:00</span>
+                                    <span id="totalTime">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="controls">
+                            <button class="control-btn sm" onclick="musicAction('shuffle')"><i class="fa-solid fa-shuffle"></i></button>
+                            <button class="control-btn" onclick="musicAction('prev')"><i class="fa-solid fa-backward-step"></i></button>
+                            <button class="control-btn lg" onclick="musicAction('toggle')"><i class="fa-solid fa-play" id="playPauseIcon"></i></button>
+                            <button class="control-btn" onclick="musicAction('next')"><i class="fa-solid fa-forward-step"></i></button>
+                            <button class="control-btn sm" onclick="musicAction('loop')"><i class="fa-solid fa-repeat"></i></button>
+                        </div>
+
+                        <div class="queue-section">
+                            <h3>Queue</h3>
+                            <ul class="queue-list" id="queueList">
+                                <li class="empty-queue">Queue is empty</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Servers Tab (Placeholder) -->
+                <div id="servers" class="tab-content">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-server"></i>
+                        <h2>Server Management</h2>
+                        <p>Login to manage your servers.</p>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
