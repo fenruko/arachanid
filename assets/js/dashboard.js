@@ -1,5 +1,5 @@
 // CONFIGURATION
-const API_BASE_URL = "https://qualify-ordinance-api-toll.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
+const API_BASE_URL = "https://jeans-saving-airports-pants.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
 const CLIENT_ID = "1329184069426348052"; 
 const SPOTIFY_CLIENT_ID = "04091d0b054b4e028b3f8cfe39826363"; // User must provide this!
 
