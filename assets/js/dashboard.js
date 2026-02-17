@@ -1,5 +1,5 @@
 // CONFIGURATION
-const API_BASE_URL = "https://counting-sticks-enabled-jacksonville.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
+const API_BASE_URL = "https://bedroom-bronze-additionally-suddenly.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
 const CLIENT_ID = "1329184069426348052"; 
 const SPOTIFY_CLIENT_ID = "04091d0b054b4e028b3f8cfe39826363"; // User must provide this!
 
