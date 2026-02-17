@@ -9,6 +9,7 @@ let userProfile = null;
 let selectedGuildId = null;
 let accessToken = null;
 let currentTrackDuration = 0;
+let currentTrackTitle = "";
 let isSeeking = false;
 
 // Initialization
@@ -413,48 +414,109 @@ async function updateMusicState() {
             document.getElementById('albumArt').innerHTML = data.current.artwork ? '' : '<i class="fa-solid fa-music"></i>';
             document.getElementById('playPauseIcon').className = data.paused ? "fa-solid fa-play" : "fa-solid fa-pause";
             
-            // Seek Bar Logic
-            currentTrackDuration = data.current.duration; // ms
-            if (!isSeeking) {
-                const percent = (data.position / data.current.duration) * 100;
-                document.getElementById('seekBar').value = percent || 0;
-                document.getElementById('currentTime').textContent = formatTime(data.position);
-                document.getElementById('totalTime').textContent = formatTime(data.current.duration);
-            }
-
-        } else {
-            // Reset
-            document.getElementById('trackTitle').textContent = "No Track Playing";
-            document.getElementById('trackArtist').textContent = "Queue is empty";
-            document.getElementById('albumArt').style.backgroundImage = "none";
-            document.getElementById('albumArt').innerHTML = '<i class="fa-solid fa-music"></i>';
-            document.getElementById('playPauseIcon').className = "fa-solid fa-play";
-            document.getElementById('seekBar').value = 0;
-            document.getElementById('currentTime').textContent = "0:00";
-            document.getElementById('totalTime').textContent = "0:00";
-        }
-
-        // Update Queue with Buttons
-        const queueList = document.getElementById('queueList');
-        if (data.queue && data.queue.length > 0) {
-            queueList.innerHTML = data.queue.map((t, i) => `
-                <li>
-                    <div style="flex:1;">
-                        <div style="font-weight: 500;">${i+1}. ${t.title}</div>
-                        <div style="font-size:12px; color: #888;">${t.author} • ${formatTime(t.duration)}</div>
-                    </div>
-                    <div class="queue-actions" style="display:flex; gap:5px;">
-                        <button onclick="musicControl('play_now', ${i})" title="Play Now" style="background:none; border:none; color:#4ade80; cursor:pointer;"><i class="fa-solid fa-play"></i></button>
-                        <button onclick="musicControl('queue_remove', ${i})" title="Remove" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </li>
-            `).join('');
-        } else {
-            queueList.innerHTML = '<li class="empty-queue">Queue is empty</li>';
-        }
-
-        document.getElementById('musicConnection').textContent = "Connected";
-        document.getElementById('musicConnection').style.color = "#4ade80";
+                        // Seek Bar Logic
+            
+                        currentTrackDuration = data.current.duration; // ms
+            
+                        // Check if song changed for lyrics auto-refresh
+            
+                        if (currentTrackTitle !== data.current.title && document.getElementById('lyricsContainer').style.display === 'block') {
+            
+                            openLyrics();
+            
+                        }
+            
+                        currentTrackTitle = data.current.title;
+            
+            
+            
+                        if (!isSeeking) {
+            
+                            const percent = (data.position / data.current.duration) * 100;
+            
+                            document.getElementById('seekBar').value = percent || 0;
+            
+                            document.getElementById('currentTime').textContent = formatTime(data.position);
+            
+                            document.getElementById('totalTime').textContent = formatTime(data.current.duration);     
+            
+                        }
+            
+            
+            
+                    } else {
+            
+                        // Reset
+            
+                        document.getElementById('trackTitle').textContent = "No Track Playing";
+            
+                        document.getElementById('trackArtist').textContent = "Queue is empty";
+            
+                        document.getElementById('albumArt').style.backgroundImage = "none";
+            
+                        document.getElementById('albumArt').innerHTML = '<i class="fa-solid fa-music"></i>';
+            
+                        document.getElementById('playPauseIcon').className = "fa-solid fa-play";
+            
+                        document.getElementById('seekBar').value = 0;
+            
+                        document.getElementById('currentTime').textContent = "0:00";
+            
+                        document.getElementById('totalTime').textContent = "0:00";
+            
+                        currentTrackTitle = ""; // Reset current track title
+            
+                        closeLyrics(); // Close lyrics if no song is playing
+            
+                    }
+            
+            
+            
+                    // Update Queue with Buttons
+            
+                    const queueList = document.getElementById('queueList');
+            
+                    if (data.queue && data.queue.length > 0) {
+            
+                        queueList.innerHTML = data.queue.map((t, i) => `
+            
+                            <li>
+            
+                                <div style="flex:1;">
+            
+                                    <div style="font-weight: 500;">${i+1}. ${t.title}</div>
+            
+                                    <div style="font-size:12px; color: #888;">${t.author} • ${formatTime(t.duration)}</div>
+            
+                                </div>
+            
+                                <div class="queue-actions" style="display:flex; gap:5px;">
+            
+                                    <button onclick="musicControl('queue_move_up', ${i})" title="Move Up" style="background:none; border:none; color:#60a5fa; cursor:pointer;"><i class="fa-solid fa-arrow-up"></i></button>
+            
+                                    <button onclick="musicControl('queue_move_down', ${i})" title="Move Down" style="background:none; border:none; color:#60a5fa; cursor:pointer;"><i class="fa-solid fa-arrow-down"></i></button>
+            
+                                    <button onclick="musicControl('play_now', ${i})" title="Play Now" style="background:none; border:none; color:#4ade80; cursor:pointer;"><i class="fa-solid fa-play"></i></button>
+            
+                                    <button onclick="musicControl('queue_remove', ${i})" title="Remove" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+            
+                                </div>
+            
+                            </li>
+            
+                        `).join('');
+            
+                    } else {
+            
+                        queueList.innerHTML = '<li class="empty-queue">Queue is empty</li>';
+            
+                    }
+            
+            
+            
+                    document.getElementById('musicConnection').textContent = "Connected";
+            
+                    document.getElementById('musicConnection').style.color = "#4ade80";
 
     } catch (e) {
         console.error(e);
