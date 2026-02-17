@@ -86,6 +86,18 @@
                             <div class="icon-box orange"><i class="fa-solid fa-microchip"></i></div>
                             <div class="stat-info"><h3>Shards</h3><p id="shardCount">...</p></div>
                         </div>
+                        <div class="stat-card">
+                            <div class="icon-box pink"><i class="fa-solid fa-clock"></i></div>
+                            <div class="stat-info"><h3>Uptime</h3><p id="uptimeCount">...</p></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon-box red"><i class="fa-solid fa-memory"></i></div>
+                            <div class="stat-info"><h3>RAM Usage</h3><p id="ramUsage">...</p></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="icon-box yellow"><i class="fa-solid fa-tachometer-alt"></i></div>
+                            <div class="stat-info"><h3>CPU Usage</h3><p id="cpuUsage">...</p></div>
+                        </div>
                     </div>
                 </div>
 
@@ -160,6 +172,22 @@
                             <ul class="queue-list" id="queueList">
                                 <li class="empty-queue">Queue is empty</li>
                             </ul>
+                        </div>
+
+                        <!-- Spotify Section -->
+                        <div id="spotifySection" class="spotify-section" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3><i class="fa-brands fa-spotify" style="color: #1DB954;"></i> Spotify Playlists</h3>
+                                <button onclick="spotifyLogin()" id="spotifyLoginBtn" style="padding: 8px 16px; background: #1DB954; color: white; border: none; border-radius: 20px; font-weight: 600; cursor: pointer;">
+                                    Connect Spotify
+                                </button>
+                            </div>
+                            <div id="spotifyPlaylists" class="playlist-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;">
+                                <!-- Playlists will be injected here -->
+                                <div style="grid-column: 1 / -1; text-align: center; color: #888; padding: 20px;">
+                                    Connect Spotify to view your playlists.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

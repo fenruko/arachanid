@@ -1,6 +1,7 @@
 // CONFIGURATION
-const API_BASE_URL = "https://symposium-signals-influence-involves.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
+const API_BASE_URL = "https://facts-ref-enrolled-produces.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
 const CLIENT_ID = "1329184069426348052"; 
+const SPOTIFY_CLIENT_ID = "YOUR_SPOTIFY_CLIENT_ID"; // User must provide this!
 
 // State
 let currentTab = 'overview';
@@ -8,6 +9,7 @@ let updateInterval = null;
 let userProfile = null;
 let selectedGuildId = null;
 let accessToken = null;
+let spotifyToken = null;
 let currentTrackDuration = 0;
 let currentTrackTitle = "";
 let isSeeking = false;
@@ -16,20 +18,35 @@ let isSeeking = false;
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Check for Redirect Token (Hash)
     const fragment = new URLSearchParams(window.location.hash.slice(1));
+    
     if (fragment.has('access_token')) {
         const token = fragment.get('access_token');
         const tokenType = fragment.get('token_type');
-        // Save to LocalStorage
-        localStorage.setItem('discord_token', token);
-        localStorage.setItem('discord_token_type', tokenType);
-        window.history.replaceState({}, document.title, window.location.pathname); // Clean URL
-        fetchUserProfile(tokenType, token);
+        const scope = fragment.get('scope') || "";
+
+        if (scope.includes('guilds')) {
+            // Discord Login
+            localStorage.setItem('discord_token', token);
+            localStorage.setItem('discord_token_type', tokenType);
+            window.history.replaceState({}, document.title, window.location.pathname); 
+            fetchUserProfile(tokenType, token);
+        } else if (scope.includes('playlist')) {
+            // Spotify Login
+            localStorage.setItem('spotify_token', token);
+            window.history.replaceState({}, document.title, window.location.pathname);
+            checkSpotifyConnection();
+        }
     } 
-    // 2. Check for Saved Token
-    else if (localStorage.getItem('discord_token')) {
-        const token = localStorage.getItem('discord_token');
-        const type = localStorage.getItem('discord_token_type');
-        fetchUserProfile(type, token);
+    // 2. Check for Saved Tokens
+    else {
+        if (localStorage.getItem('discord_token')) {
+            const token = localStorage.getItem('discord_token');
+            const type = localStorage.getItem('discord_token_type');
+            fetchUserProfile(type, token);
+        }
+        if (localStorage.getItem('spotify_token')) {
+            checkSpotifyConnection();
+        }
     }
 
     // Tab Switching
@@ -45,13 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (serverSelect) {
         serverSelect.addEventListener('change', (e) => {
             selectedGuildId = e.target.value;
-            // Also save selected server preference
             localStorage.setItem('selected_guild', selectedGuildId);
             updateMusicState();
         });
     }
 
-    // Load saved server preference
     if (localStorage.getItem('selected_guild')) {
         selectedGuildId = localStorage.getItem('selected_guild');
     }
@@ -67,10 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Seek Bar
     const seekBar = document.getElementById('seekBar');
     if (seekBar) {
-        seekBar.addEventListener('input', () => { isSeeking = true; }); // Pause updates while dragging
+        seekBar.addEventListener('input', () => { isSeeking = true; }); 
         seekBar.addEventListener('change', (e) => {
             isSeeking = false;
-            // Calculate new position
             const newPos = (e.target.value / 100) * currentTrackDuration;
             musicControl('seek', newPos);
         });
@@ -121,11 +135,10 @@ function switchTab(tabName) {
     
     currentTab = tabName;
     
-    // Refresh specific tab data immediately
     if (tabName === 'servers') renderServerGrid();
     if (tabName === 'settings') loadServerSettings();
+    if (tabName === 'music') checkSpotifyConnection(); // Refresh playlist view
 
-    // Close sidebar on mobile
     const sidebar = document.getElementById('sidebar');
     if (sidebar && sidebar.classList.contains('active')) {
         toggleSidebar();
@@ -135,8 +148,7 @@ function switchTab(tabName) {
 // --- AUTHENTICATION ---
 
 function login() {
-    // Use https to match GitHub Pages standard behavior
-    const redirectUri = encodeURIComponent("https://canva.xin/dashboard.html");
+    const redirectUri = encodeURIComponent(window.location.href.split('#')[0]); // Current page
     const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=identify%20guilds`;
     window.location.href = url;
 }
@@ -154,7 +166,6 @@ async function fetchUserProfile(tokenType, token) {
         });
         
         if (!userResp.ok) {
-            // Token likely expired
             logout();
             return;
         }
@@ -162,7 +173,6 @@ async function fetchUserProfile(tokenType, token) {
         const user = await userResp.json();
         userProfile = user;
 
-        // Update Sidebar Profile
         const profileDiv = document.getElementById('userProfile');
         if (profileDiv) {
             profileDiv.innerHTML = `
@@ -171,11 +181,9 @@ async function fetchUserProfile(tokenType, token) {
                     <div style="font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis;">${user.username}</div>
                 </div>
             `;
-            // Show Logout
             document.getElementById('logoutBtnContainer').style.display = 'block';
         }
 
-        // Fetch Guilds
         fetchUserGuilds(tokenType, token);
     } catch (e) {
         console.error("Auth Error", e);
@@ -190,10 +198,8 @@ async function fetchUserGuilds(tokenType, token) {
             headers: { authorization: `${tokenType} ${token}` }
         });
         const guilds = await resp.json();
-        // Filter for Manage Server (0x20) or Admin (0x8)
         userGuildsCache = guilds.filter(g => (BigInt(g.permissions) & 0x20n) === 0x20n || (BigInt(g.permissions) & 0x8n) === 0x8n);
         
-        // Populate Dropdown
         const select = document.getElementById('serverSelect');
         if (select) {
             select.innerHTML = '<option value="" disabled selected>Select a Server</option>';
@@ -206,7 +212,6 @@ async function fetchUserGuilds(tokenType, token) {
             });
         }
         
-        // Populate Server Grid if tab is open
         if (currentTab === 'servers') renderServerGrid();
 
     } catch (e) {
@@ -254,11 +259,89 @@ function selectServer(guildId) {
     selectedGuildId = guildId;
     localStorage.setItem('selected_guild', guildId);
     
-    // Update Dropdown
     const select = document.getElementById('serverSelect');
     if (select) select.value = guildId;
 
-    switchTab('settings'); // Go directly to settings when clicking from Server Grid
+    switchTab('settings');
+}
+
+// --- SPOTIFY INTEGRATION ---
+
+function spotifyLogin() {
+    const redirectUri = encodeURIComponent(window.location.href.split('#')[0]);
+    const scope = encodeURIComponent('playlist-read-private playlist-read-collaborative user-library-read');
+    if (SPOTIFY_CLIENT_ID === "YOUR_SPOTIFY_CLIENT_ID") {
+        alert("Please configure the Spotify Client ID in dashboard.js!");
+        return;
+    }
+    const url = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&response_type=token&redirect_uri=${redirectUri}&scope=${scope}&show_dialog=true`;
+    window.location.href = url;
+}
+
+function checkSpotifyConnection() {
+    const token = localStorage.getItem('spotify_token');
+    const btn = document.getElementById('spotifyLoginBtn');
+    const container = document.getElementById('spotifyPlaylists');
+    
+    if (token) {
+        if(btn) {
+            btn.textContent = "Connected";
+            btn.style.background = "#1ed760";
+            btn.disabled = true;
+        }
+        if(container && container.children.length <= 1) { // Load if empty
+             fetchSpotifyPlaylists(token);
+        }
+    }
+}
+
+async function fetchSpotifyPlaylists(token) {
+    try {
+        const res = await fetch('https://api.spotify.com/v1/me/playlists?limit=20', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (res.status === 401) { // Expired
+            localStorage.removeItem('spotify_token');
+            const btn = document.getElementById('spotifyLoginBtn');
+            if(btn) {
+                btn.textContent = "Connect Spotify";
+                btn.disabled = false;
+                btn.style.background = "#1DB954";
+            }
+            return;
+        }
+
+        const data = await res.json();
+        renderSpotifyPlaylists(data.items);
+    } catch (e) {
+        console.error("Spotify Error", e);
+        document.getElementById('spotifyPlaylists').innerHTML = '<div style="color:red;">Failed to load playlists.</div>';
+    }
+}
+
+function renderSpotifyPlaylists(playlists) {
+    const container = document.getElementById('spotifyPlaylists');
+    if (!container) return;
+
+    if (!playlists || playlists.length === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1; text-align:center;">No playlists found.</div>';
+        return;
+    }
+
+    container.innerHTML = playlists.map(p => {
+        const image = p.images && p.images.length > 0 ? p.images[0].url : 'https://via.placeholder.com/150?text=No+Cover';
+        return `
+            <div class="playlist-card" style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s;" 
+                 onclick="playTrack('${p.external_urls.spotify}')"
+                 onmouseover="this.style.background='rgba(255,255,255,0.1)'" 
+                 onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+                <img src="${image}" style="width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px; margin-bottom: 8px;">
+                <div style="font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</div>
+                <div style="font-size: 12px; color: #aaa;">${p.tracks.total} Tracks</div>
+            </div>
+        `;
+    }).join('');
 }
 
 // --- LYRICS & SETTINGS ---
@@ -313,7 +396,6 @@ async function loadServerSettings() {
     document.getElementById('configForm').style.display = 'block';
 
     try {
-        // 1. Fetch Channels for Autofill
         const channelRes = await fetch(`${API_BASE_URL}/channels/${selectedGuildId}`);
         const channelData = await channelRes.json();
         
@@ -329,13 +411,11 @@ async function loadServerSettings() {
             });
         }
 
-        // 2. Fetch Existing Settings
         const res = await fetch(`${API_BASE_URL}/settings/${selectedGuildId}`);
         const data = await res.json();
         
         document.getElementById('prefixInput').value = data.prefix || "!";
         
-        // Pre-select current channel
         if (data.welcome_channel) {
             channelSelect.value = data.welcome_channel;
         } else {
@@ -391,6 +471,20 @@ async function fetchStats() {
         document.getElementById('pingCount').textContent = `${data.latency}ms`;
         document.getElementById('shardCount').textContent = data.shards;
         
+        // New Stats
+        const uptimeElem = document.getElementById('uptimeCount');
+        if (uptimeElem) {
+             const hours = Math.floor(data.uptime / 3600);
+             const mins = Math.floor((data.uptime % 3600) / 60);
+             uptimeElem.textContent = `${hours}h ${mins}m`;
+        }
+        
+        const cpuElem = document.getElementById('cpuUsage');
+        if (cpuElem) cpuElem.textContent = `${data.cpu}%`;
+        
+        const ramElem = document.getElementById('ramUsage');
+        if (ramElem) ramElem.textContent = `${data.ram_percent}% (${data.ram_used} MB)`;
+
         document.querySelector('.status-dot').style.backgroundColor = '#4ade80';
         document.getElementById('botStatus').textContent = 'System Online';
     } catch (error) {
@@ -414,108 +508,57 @@ async function updateMusicState() {
             document.getElementById('albumArt').innerHTML = data.current.artwork ? '' : '<i class="fa-solid fa-music"></i>';
             document.getElementById('playPauseIcon').className = data.paused ? "fa-solid fa-play" : "fa-solid fa-pause";
             
-                        // Seek Bar Logic
-            
                         currentTrackDuration = data.current.duration; // ms
             
-                        // Check if song changed for lyrics auto-refresh
-            
                         if (currentTrackTitle !== data.current.title && document.getElementById('lyricsContainer').style.display === 'block') {
-            
                             openLyrics();
-            
                         }
             
                         currentTrackTitle = data.current.title;
             
-            
-            
                         if (!isSeeking) {
-            
                             const percent = (data.position / data.current.duration) * 100;
-            
                             document.getElementById('seekBar').value = percent || 0;
-            
                             document.getElementById('currentTime').textContent = formatTime(data.position);
-            
                             document.getElementById('totalTime').textContent = formatTime(data.current.duration);     
-            
                         }
             
-            
-            
                     } else {
-            
                         // Reset
-            
                         document.getElementById('trackTitle').textContent = "No Track Playing";
-            
                         document.getElementById('trackArtist').textContent = "Queue is empty";
-            
                         document.getElementById('albumArt').style.backgroundImage = "none";
-            
                         document.getElementById('albumArt').innerHTML = '<i class="fa-solid fa-music"></i>';
-            
                         document.getElementById('playPauseIcon').className = "fa-solid fa-play";
-            
                         document.getElementById('seekBar').value = 0;
-            
                         document.getElementById('currentTime').textContent = "0:00";
-            
                         document.getElementById('totalTime').textContent = "0:00";
-            
-                        currentTrackTitle = ""; // Reset current track title
-            
-                        closeLyrics(); // Close lyrics if no song is playing
-            
+                        currentTrackTitle = ""; 
+                        closeLyrics(); 
                     }
             
-            
-            
-                    // Update Queue with Buttons
-            
+                    // Update Queue
                     const queueList = document.getElementById('queueList');
-            
                     if (data.queue && data.queue.length > 0) {
-            
                         queueList.innerHTML = data.queue.map((t, i) => `
-            
                             <li>
-            
                                 <div style="flex:1;">
-            
                                     <div style="font-weight: 500;">${i+1}. ${t.title}</div>
-            
                                     <div style="font-size:12px; color: #888;">${t.author} • ${formatTime(t.duration)}</div>
-            
                                 </div>
-            
                                 <div class="queue-actions" style="display:flex; gap:5px;">
-            
                                     <button onclick="musicControl('queue_move_up', ${i})" title="Move Up" style="background:none; border:none; color:#60a5fa; cursor:pointer;"><i class="fa-solid fa-arrow-up"></i></button>
-            
                                     <button onclick="musicControl('queue_move_down', ${i})" title="Move Down" style="background:none; border:none; color:#60a5fa; cursor:pointer;"><i class="fa-solid fa-arrow-down"></i></button>
-            
                                     <button onclick="musicControl('play_now', ${i})" title="Play Now" style="background:none; border:none; color:#4ade80; cursor:pointer;"><i class="fa-solid fa-play"></i></button>
-            
                                     <button onclick="musicControl('queue_remove', ${i})" title="Remove" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-            
                                 </div>
-            
                             </li>
-            
                         `).join('');
-            
                     } else {
-            
                         queueList.innerHTML = '<li class="empty-queue">Queue is empty</li>';
-            
                     }
-            
-            
             
                     document.getElementById('musicConnection').textContent = "Connected";
-            
                     document.getElementById('musicConnection').style.color = "#4ade80";
 
     } catch (e) {
@@ -558,8 +601,10 @@ async function searchMusic() {
 
 async function playTrack(uri) {
     if (!selectedGuildId) return alert("Select a server first!");
-    document.getElementById('searchResults').style.display = 'none';
-    document.getElementById('searchInput').value = '';
+    const resultsDiv = document.getElementById('searchResults');
+    if (resultsDiv) resultsDiv.style.display = 'none';
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
 
     await fetch(`${API_BASE_URL}/music/play`, {
         method: 'POST',
