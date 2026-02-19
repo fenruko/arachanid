@@ -1,7 +1,7 @@
 // CONFIGURATION
-const API_BASE_URL = "https://jeans-saving-airports-pants.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
+const API_BASE_URL = "https://participant-advise-flyer-consequence.trycloudflare.com/api"; // Update this with your Cloudflare Tunnel URL!
 const CLIENT_ID = "1329184069426348052"; 
-const SPOTIFY_CLIENT_ID = "04091d0b054b4e028b3f8cfe39826363"; // User must provide this!
+const SPOTIFY_CLIENT_ID = "04091d0b054b4e028b3f8cfe39826363"; 
 
 // State
 let currentTab = 'overview';
@@ -16,6 +16,11 @@ let isSeeking = false;
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    // Check Theme
+    if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+
     // 1. Check for Redirect Token (Hash)
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     
@@ -101,12 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial Stats Fetch
     fetchStats();
     
-    // Start Polling
-    const rate = localStorage.getItem('refresh_rate') || 3000;
+    // Start Polling (Every 1s for sync)
     updateInterval = setInterval(() => {
         if (currentTab === 'overview') fetchStats();
         if (currentTab === 'music' && selectedGuildId) updateMusicState();
-    }, parseInt(rate));
+    }, 1000);
 });
 
 // Mobile Sidebar Toggle
@@ -137,7 +141,7 @@ function switchTab(tabName) {
     
     if (tabName === 'servers') renderServerGrid();
     if (tabName === 'settings') loadServerSettings();
-    if (tabName === 'music') checkSpotifyConnection(); // Refresh playlist view
+    if (tabName === 'music') checkSpotifyConnection(); 
 
     const sidebar = document.getElementById('sidebar');
     if (sidebar && sidebar.classList.contains('active')) {
@@ -145,10 +149,21 @@ function switchTab(tabName) {
     }
 }
 
+function toggleTheme() {
+    const html = document.documentElement;
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
 // --- AUTHENTICATION ---
 
 function login() {
-    const redirectUri = encodeURIComponent(window.location.href.split('#')[0]); // Current page
+    const redirectUri = encodeURIComponent(window.location.href.split('#')[0]); 
     const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=identify%20guilds`;
     window.location.href = url;
 }
@@ -289,7 +304,7 @@ function checkSpotifyConnection() {
             btn.style.background = "#1ed760";
             btn.disabled = true;
         }
-        if(container && container.children.length <= 1) { // Load if empty
+        if(container && container.children.length <= 1) { 
              fetchSpotifyPlaylists(token);
         }
     }
@@ -301,7 +316,7 @@ async function fetchSpotifyPlaylists(token) {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
-        if (res.status === 401) { // Expired
+        if (res.status === 401) { 
             localStorage.removeItem('spotify_token');
             const btn = document.getElementById('spotifyLoginBtn');
             if(btn) {
@@ -471,7 +486,6 @@ async function fetchStats() {
         document.getElementById('pingCount').textContent = `${data.latency}ms`;
         document.getElementById('shardCount').textContent = data.shards;
         
-        // New Stats
         const uptimeElem = document.getElementById('uptimeCount');
         if (uptimeElem) {
              const hours = Math.floor(data.uptime / 3600);
@@ -500,6 +514,15 @@ async function updateMusicState() {
         const response = await fetch(`${API_BASE_URL}/music/state/${selectedGuildId}`);
         const data = await response.json();
 
+        // Update Modes
+        if (data.modes) {
+            document.getElementById('mode247').checked = data.modes.is_24_7;
+            document.getElementById('modeRadio').checked = data.modes.radio;
+            if (data.modes.radio_artist && document.getElementById('radioArtist').value === "") {
+                document.getElementById('radioArtist').value = data.modes.radio_artist;
+            }
+        }
+
         // Update Now Playing
         if (data.current) {
             document.getElementById('trackTitle').textContent = data.current.title;
@@ -508,58 +531,58 @@ async function updateMusicState() {
             document.getElementById('albumArt').innerHTML = data.current.artwork ? '' : '<i class="fa-solid fa-music"></i>';
             document.getElementById('playPauseIcon').className = data.paused ? "fa-solid fa-play" : "fa-solid fa-pause";
             
-                        currentTrackDuration = data.current.duration; // ms
-            
-                        if (currentTrackTitle !== data.current.title && document.getElementById('lyricsContainer').style.display === 'block') {
-                            openLyrics();
-                        }
-            
-                        currentTrackTitle = data.current.title;
-            
-                        if (!isSeeking) {
-                            const percent = (data.position / data.current.duration) * 100;
-                            document.getElementById('seekBar').value = percent || 0;
-                            document.getElementById('currentTime').textContent = formatTime(data.position);
-                            document.getElementById('totalTime').textContent = formatTime(data.current.duration);     
-                        }
-            
-                    } else {
-                        // Reset
-                        document.getElementById('trackTitle').textContent = "No Track Playing";
-                        document.getElementById('trackArtist').textContent = "Queue is empty";
-                        document.getElementById('albumArt').style.backgroundImage = "none";
-                        document.getElementById('albumArt').innerHTML = '<i class="fa-solid fa-music"></i>';
-                        document.getElementById('playPauseIcon').className = "fa-solid fa-play";
-                        document.getElementById('seekBar').value = 0;
-                        document.getElementById('currentTime').textContent = "0:00";
-                        document.getElementById('totalTime').textContent = "0:00";
-                        currentTrackTitle = ""; 
-                        closeLyrics(); 
-                    }
-            
-                    // Update Queue
-                    const queueList = document.getElementById('queueList');
-                    if (data.queue && data.queue.length > 0) {
-                        queueList.innerHTML = data.queue.map((t, i) => `
-                            <li>
-                                <div style="flex:1;">
-                                    <div style="font-weight: 500;">${i+1}. ${t.title}</div>
-                                    <div style="font-size:12px; color: #888;">${t.author} • ${formatTime(t.duration)}</div>
-                                </div>
-                                <div class="queue-actions" style="display:flex; gap:5px;">
-                                    <button onclick="musicControl('queue_move_up', ${i})" title="Move Up" style="background:none; border:none; color:#60a5fa; cursor:pointer;"><i class="fa-solid fa-arrow-up"></i></button>
-                                    <button onclick="musicControl('queue_move_down', ${i})" title="Move Down" style="background:none; border:none; color:#60a5fa; cursor:pointer;"><i class="fa-solid fa-arrow-down"></i></button>
-                                    <button onclick="musicControl('play_now', ${i})" title="Play Now" style="background:none; border:none; color:#4ade80; cursor:pointer;"><i class="fa-solid fa-play"></i></button>
-                                    <button onclick="musicControl('queue_remove', ${i})" title="Remove" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </li>
-                        `).join('');
-                    } else {
-                        queueList.innerHTML = '<li class="empty-queue">Queue is empty</li>';
-                    }
-            
-                    document.getElementById('musicConnection').textContent = "Connected";
-                    document.getElementById('musicConnection').style.color = "#4ade80";
+            currentTrackDuration = data.current.duration; // ms
+
+            if (currentTrackTitle !== data.current.title && document.getElementById('lyricsContainer').style.display === 'block') {
+                openLyrics();
+            }
+
+            currentTrackTitle = data.current.title;
+
+            if (!isSeeking) {
+                const percent = (data.position * 1000 / data.current.duration) * 100; // API returns seconds
+                document.getElementById('seekBar').value = percent || 0;
+                document.getElementById('currentTime').textContent = formatTime(data.position * 1000);
+                document.getElementById('totalTime').textContent = formatTime(data.current.duration);     
+            }
+
+        } else {
+            // Reset
+            document.getElementById('trackTitle').textContent = "No Track Playing";
+            document.getElementById('trackArtist').textContent = "Queue is empty";
+            document.getElementById('albumArt').style.backgroundImage = "none";
+            document.getElementById('albumArt').innerHTML = '<i class="fa-solid fa-music"></i>';
+            document.getElementById('playPauseIcon').className = "fa-solid fa-play";
+            document.getElementById('seekBar').value = 0;
+            document.getElementById('currentTime').textContent = "0:00";
+            document.getElementById('totalTime').textContent = "0:00";
+            currentTrackTitle = ""; 
+            closeLyrics(); 
+        }
+
+        // Update Queue
+        const queueList = document.getElementById('queueList');
+        if (data.queue && data.queue.length > 0) {
+            queueList.innerHTML = data.queue.map((t, i) => `
+                <li>
+                    <div style="flex:1;">
+                        <div style="font-weight: 500;">${i+1}. ${t.title}</div>
+                        <div style="font-size:12px; color: #888;">${t.author} • ${formatTime(t.duration)}</div>
+                    </div>
+                    <div class="queue-actions" style="display:flex; gap:5px;">
+                        <button onclick="musicControl('queue_move_up', ${i})" title="Move Up" style="background:none; border:none; color:#60a5fa; cursor:pointer;"><i class="fa-solid fa-arrow-up"></i></button>
+                        <button onclick="musicControl('queue_move_down', ${i})" title="Move Down" style="background:none; border:none; color:#60a5fa; cursor:pointer;"><i class="fa-solid fa-arrow-down"></i></button>
+                        <button onclick="musicControl('play_now', ${i})" title="Play Now" style="background:none; border:none; color:#4ade80; cursor:pointer;"><i class="fa-solid fa-play"></i></button>
+                        <button onclick="musicControl('queue_remove', ${i})" title="Remove" style="background:none; border:none; color:#ef4444; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </li>
+            `).join('');
+        } else {
+            queueList.innerHTML = '<li class="empty-queue">Queue is empty</li>';
+        }
+
+        document.getElementById('musicConnection').textContent = "Connected";
+        document.getElementById('musicConnection').style.color = "#4ade80";
 
     } catch (e) {
         console.error(e);
@@ -601,17 +624,68 @@ async function searchMusic() {
 
 async function playTrack(uri) {
     if (!selectedGuildId) return alert("Select a server first!");
+    if (!userProfile) return alert("Login required!");
+    
     const resultsDiv = document.getElementById('searchResults');
     if (resultsDiv) resultsDiv.style.display = 'none';
     const searchInput = document.getElementById('searchInput');
     if (searchInput) searchInput.value = '';
 
-    await fetch(`${API_BASE_URL}/music/play`, {
+    const res = await fetch(`${API_BASE_URL}/music/play`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guild_id: selectedGuildId, uri: uri, user_id: userProfile.id })
+        body: JSON.stringify({ guild_id: selectedGuildId, uri: uri, query: uri, user_id: userProfile.id })
     });
+    
+    if (!res.ok) {
+        const err = await res.json();
+        alert("Error: " + err.error);
+    }
+    
     setTimeout(updateMusicState, 500);
+}
+
+async function uploadFile() {
+    if (!selectedGuildId) return alert("Select a server first!");
+    if (!userProfile) return alert("Login required!");
+    
+    const input = document.getElementById('fileUpload');
+    if (!input.files || input.files.length === 0) return alert("Select a file!");
+    
+    const formData = new FormData();
+    formData.append('file', input.files[0]);
+    formData.append('guild_id', selectedGuildId);
+    formData.append('user_id', userProfile.id);
+    
+    const res = await fetch(`${API_BASE_URL}/music/upload`, {
+        method: 'POST',
+        body: formData
+    });
+    
+    if (res.ok) {
+        alert("Uploaded and queued!");
+        input.value = "";
+    } else {
+        const err = await res.json();
+        alert("Upload Error: " + err.error);
+    }
+}
+
+async function toggleMode(mode, value) {
+    if (mode === 'mode_radio' && value === true) {
+        // Grab artist if set
+        const artist = document.getElementById('radioArtist').value;
+        await musicControlWithData('mode_radio', value, { artist: artist });
+    } else {
+        await musicControl(mode, value);
+    }
+}
+
+async function updateRadioArtist() {
+    if (document.getElementById('modeRadio').checked) {
+        const artist = document.getElementById('radioArtist').value;
+        await musicControlWithData('mode_radio', true, { artist: artist });
+    }
 }
 
 async function musicAction(action) {
@@ -619,13 +693,32 @@ async function musicAction(action) {
 }
 
 async function musicControl(action, value) {
-    if (!selectedGuildId) return;
+    musicControlWithData(action, value, {});
+}
 
-    await fetch(`${API_BASE_URL}/music/control`, {
+async function musicControlWithData(action, value, extraData) {
+    if (!selectedGuildId) return;
+    if (!userProfile) return alert("Login required!");
+
+    const payload = { 
+        guild_id: selectedGuildId, 
+        action: action, 
+        value: value,
+        user_id: userProfile.id,
+        ...extraData
+    };
+
+    const res = await fetch(`${API_BASE_URL}/music/control`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guild_id: selectedGuildId, action: action, value: value })
+        body: JSON.stringify(payload)
     });
+    
+    if (!res.ok) {
+        const err = await res.json();
+        alert("Error: " + err.error);
+    }
+    
     setTimeout(updateMusicState, 300);
 }
 
