@@ -1,6 +1,6 @@
-# Welcome to Archanid
+# Welcome to Rift
 
-**Archanid** is the ultimate infrastructure tool for your Discord server. It combines visual architecture design with high-fidelity music, global economy, and advanced moderation.
+**Rift** is the ultimate infrastructure tool for your Discord server. It combines visual architecture design with high-fidelity music, global economy, and advanced moderation.
 
 ## Key Features
 
@@ -22,5 +22,5 @@ Automated security, timed bans, logging, and a robust verification system.
 
 Get your server running in minutes.
 
-[**Invite Archanid**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot)
+[**Invite Rift**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot)
 [**Setup Guide**](getting-started/installation.md)

@@ -1,15 +1,15 @@
 # Setup Guide
 
-Welcome to the **Archanid** setup guide. This page will walk you through the process of inviting the bot, configuring its initial permissions, and using the **Server Architect** to build your community in seconds.
+Welcome to the **Rift** setup guide. This page will walk you through the process of inviting the bot, configuring its initial permissions, and using the **Server Architect** to build your community in seconds.
 
 ## 1. Inviting the Bot
 
-To get started, you need to invite Archanid to your server.
+To get started, you need to invite Rift to your server.
 
 !!! tip "Permissions"
-    Archanid requires **Administrator** permissions to function correctly as a "Server Architect". It needs to create channels, manage roles, and moderate users.
+    Rift requires **Administrator** permissions to function correctly as a "Server Architect". It needs to create channels, manage roles, and moderate users.
 
-[**Click here to Invite Archanid**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot){ .md-button .md-button--primary }
+[**Click here to Invite Rift**](https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot){ .md-button .md-button--primary }
 
 1.  Select your server from the dropdown menu.
 2.  Click **Authorize**.
@@ -19,7 +19,7 @@ To get started, you need to invite Archanid to your server.
 
 ## 2. The Server Architect (First Run)
 
-Once Archanid joins, the most powerful feature at your disposal is the **Server Architect**. This tool allows you to design your server's layout (Categories, Channels, Roles) visually and then builds it for you automatically.
+Once Rift joins, the most powerful feature at your disposal is the **Server Architect**. This tool allows you to design your server's layout (Categories, Channels, Roles) visually and then builds it for you automatically.
 
 ### Running the Wizard
 Type the following command in any channel:
@@ -42,7 +42,7 @@ The Wizard will open an interactive blueprint menu.
 ### Building
 Once you are happy with your blueprint, click the green **BUILD SERVER** button.
 
-> **Archanid will now:**
+> **Rift will now:**
 >
 > *   Create all the Roles you defined.
 > *   Create the Categories.
@@ -68,7 +68,7 @@ After the Architect finishes, your server structure is ready. Here are the next 
 ## Troubleshooting
 
 ??? question "The Wizard isn't creating channels?"
-    Ensure Archanid has the **Administrator** permission and that its role is **higher** than the roles it is trying to manage in the Server Settings > Roles list.
+    Ensure Rift has the **Administrator** permission and that its role is **higher** than the roles it is trying to manage in the Server Settings > Roles list.
 
 ??? question "I can't see the slash commands?"
     If slash commands aren't appearing, try re-inviting the bot or checking your User Settings > Text & Images > "Use Slash Commands".

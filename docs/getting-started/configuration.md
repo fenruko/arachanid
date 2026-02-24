@@ -1,6 +1,6 @@
 # Configuration
 
-Archanid offers advanced configuration options for bot owners and server administrators. This section covers managing bot ownership, privileged users, and global settings.
+Rift offers advanced configuration options for bot owners and server administrators. This section covers managing bot ownership, privileged users, and global settings.
 
 ## Bot Owners
 
@@ -64,7 +64,7 @@ Use the `/settings add_privileged_user` command. You can assign multiple privile
 ## Server Settings
 
 ### Custom Prefix
-While Archanid is designed for Slash Commands (`/`), it also supports legacy text commands. You can change the prefix for your server.
+While Rift is designed for Slash Commands (`/`), it also supports legacy text commands. You can change the prefix for your server.
 
 **Command:**
 ```bash

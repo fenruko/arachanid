@@ -1,6 +1,6 @@
 # Social & Leveling Module
 
-Build engagement with Archanid's social features. Rewarding activity creates a stickier community.
+Build engagement with Rift's social features. Rewarding activity creates a stickier community.
 
 ## Leveling System
 

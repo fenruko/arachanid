@@ -14,7 +14,7 @@ When you run `/wizard`, you are creating a temporary **Blueprint**. This allows 
 
 ## Automated Setup
 
-The Wizard can automatically configure the infrastructure for other Archanid modules.
+The Wizard can automatically configure the infrastructure for other Rift modules.
 
 | Feature | Created Channels | Purpose |
 | :--- | :--- | :--- |

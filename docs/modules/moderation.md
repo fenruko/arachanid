@@ -5,7 +5,7 @@ The Moderation module provides security, logging, and automated enforcement. It 
 ## Automated Systems
 
 ### Auto-Moderation (AutoMod)
-Archanid filters chat in real-time.
+Rift filters chat in real-time.
 
 **Command:** `/automod toggle <feature>`
 
@@ -55,7 +55,7 @@ All manual actions are logged to the configured log channel.
 
 ## Logging
 
-Archanid logs all actions to a dedicated channel.
+Rift logs all actions to a dedicated channel.
 
 **Setup:**
 1.  Create a channel (e.g., `#mod-logs`).
