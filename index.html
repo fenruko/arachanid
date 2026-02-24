@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rift</title>
     
-    <!-- Google Fonts -->
+    <link rel="icon" type="image/png" href="YOUR_IMAGE_URL_HERE">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Permanent+Marker&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
@@ -32,8 +31,9 @@
             overflow-x: hidden;
         }
         
+        /* Swapped to the new handwritten font */
         .font-display {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Permanent Marker', cursive;
         }
         
         /* Animated Gradient Background */
@@ -345,24 +345,19 @@
 </head>
 <body class="antialiased selection:bg-white selection:text-black">
 
-    <!-- Animated Gradient Background -->
     <div class="gradient-bg"></div>
     
-    <!-- Floating Orbs -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
     
-    <!-- Grid Pattern -->
     <div class="grid-pattern"></div>
 
-    <!-- Noise -->
     <div class="noise"></div>
 
-    <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-6 mix-blend-difference opacity-0 transition-opacity duration-700" id="navbar">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="#" class="font-display font-bold text-sm tracking-widest magnetic glow-text">
+            <a href="#" class="font-display text-sm tracking-widest magnetic glow-text">
                 RIFT
             </a>
             
@@ -382,27 +377,22 @@
         </div>
     </nav>
 
-    <!-- Scroll Sequence -->
     <div class="scroll-container" id="sequence-wrapper">
         <div class="scroll-pinned">
             
-            <!-- Slide 1 -->
             <div class="sequence-line font-display active" data-index="0">
                 Your server<br>deserves perfection.
             </div>
 
-            <!-- Slide 2 -->
             <div class="sequence-line font-display" data-index="1">
                 Server Architect,<br>Music, Economy, AI.
             </div>
 
-            <!-- Slide 3 -->
             <div class="sequence-line font-display" data-index="2">
                 One bot.<br>Infinite possibilities.
             </div>
 
-            <!-- Slide 4 -->
-            <div class="sequence-line font-display" data-index="3" style="font-size: clamp(3rem, 10vw, 8rem); letter-spacing: -0.04em;">
+            <div class="sequence-line font-display" data-index="3" style="font-size: clamp(4rem, 12vw, 10rem); letter-spacing: -0.04em;">
                 RIFT
             </div>
 
@@ -410,7 +400,6 @@
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
 
-            <!-- Scroll Arrow -->
             <div class="scroll-arrow" id="scroll-arrow">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 5v14M5 12l7 7 7-7"/>
@@ -419,10 +408,8 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <main class="relative">
         
-        <!-- Hero -->
         <section class="min-h-screen flex items-center justify-center px-6 section-glow">
             <div class="max-w-4xl mx-auto text-center">
                 
@@ -430,7 +417,7 @@
                     The Ultimate Discord Architect
                 </p>
                 
-                <h1 class="font-display text-5xl md:text-8xl font-medium mb-8 tracking-tight reveal-line glow-text" style="transition-delay: 0.1s;" id="main-title">
+                <h1 class="font-display text-6xl md:text-9xl mb-8 tracking-tight reveal-line glow-text" style="transition-delay: 0.1s;" id="main-title">
                     RIFT
                 </h1>
                 
@@ -467,7 +454,6 @@
             </div>
         </section>
 
-        <!-- Features -->
         <section class="py-32 px-6 section-glow">
             <div class="max-w-6xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -478,7 +464,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-lg font-medium mb-3">Hi-Fi Music</h3>
+                        <h3 class="font-display text-xl mb-3">Hi-Fi Music</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">SoundCloud & Bandcamp integration with Last.fm scrobbling, artist charts, and advanced audio filters.</p>
                     </div>
 
@@ -488,7 +474,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-lg font-medium mb-3">Server Architect</h3>
+                        <h3 class="font-display text-xl mb-3">Server Architect</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Design your entire server layout visually. Create channels, roles, and permissions in seconds with the Wizard.</p>
                     </div>
 
@@ -498,7 +484,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-lg font-medium mb-3">Moderation</h3>
+                        <h3 class="font-display text-xl mb-3">Moderation</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Advanced auto-mod, detailed logging, ticket systems, and seamless user verification flow.</p>
                     </div>
 
@@ -508,7 +494,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-lg font-medium mb-3">Social & Levels</h3>
+                        <h3 class="font-display text-xl mb-3">Social & Levels</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Engaging leveling system, reputation tracking, customizable profiles, and social interactions.</p>
                     </div>
 
@@ -518,7 +504,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-lg font-medium mb-3">Global Economy</h3>
+                        <h3 class="font-display text-xl mb-3">Global Economy</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Comprehensive economy with global currency, trading, player shops, and market simulation.</p>
                     </div>
 
@@ -528,7 +514,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-lg font-medium mb-3">Utilities</h3>
+                        <h3 class="font-display text-xl mb-3">Utilities</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Sticky messages, reminders, detailed server stats, and powerful configuration tools.</p>
                     </div>
 
@@ -536,18 +522,16 @@
             </div>
         </section>
 
-        <!-- Top.gg Widget -->
         <section class="py-12 px-6 flex justify-center section-glow">
             <a href="https://top.gg/bot/1329184069426348052" target="_blank" class="widget-glow">
                 <img src="https://top.gg/api/widget/1329184069426348052.svg" alt="Rift on Top.gg">
             </a>
         </section>
 
-        <!-- Footer -->
         <footer class="section-glow py-12 px-6">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-8">
-                    <span class="font-display font-bold text-sm tracking-widest glow-text">RIFT</span>
+                    <span class="font-display text-sm tracking-widest glow-text">RIFT</span>
                     <div class="flex gap-6 text-sm text-neutral-500">
                         <a href="#" id="privacy-trigger" class="hover:text-white transition-colors">Privacy</a>
                         <a href="#" id="terms-trigger" class="hover:text-white transition-colors">Terms</a>
@@ -559,12 +543,9 @@
         </footer>
     </main>
 
-    <!-- Privacy Policy Modal -->
     <div id="privacy-modal" class="fixed inset-0 z-[9999] hidden opacity-0 transition-opacity duration-300">
-        <!-- Backdrop -->
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="privacy-backdrop"></div>
         
-        <!-- Content -->
         <div class="relative w-full h-full flex items-center justify-center p-4">
             <div class="bg-black/90 border border-white/10 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto relative transform scale-95 transition-transform duration-300" id="privacy-content">
                 
@@ -575,7 +556,7 @@
                 </button>
 
                 <div class="p-8 md:p-12">
-                    <h2 class="font-display text-3xl font-bold mb-8">Privacy Policy</h2>
+                    <h2 class="font-display text-4xl mb-8">Privacy Policy</h2>
                     
                     <div class="space-y-6 text-neutral-400 text-sm leading-relaxed">
                         <p class="font-medium text-white">Last updated: February 2026</p>
@@ -625,12 +606,9 @@
         </div>
     </div>
 
-    <!-- Terms of Service Modal -->
     <div id="terms-modal" class="fixed inset-0 z-[9999] hidden opacity-0 transition-opacity duration-300">
-        <!-- Backdrop -->
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="terms-backdrop"></div>
         
-        <!-- Content -->
         <div class="relative w-full h-full flex items-center justify-center p-4">
             <div class="bg-black/90 border border-white/10 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto relative transform scale-95 transition-transform duration-300" id="terms-content">
                 
@@ -641,7 +619,7 @@
                 </button>
 
                 <div class="p-8 md:p-12">
-                    <h2 class="font-display text-3xl font-bold mb-8">Terms of Service</h2>
+                    <h2 class="font-display text-4xl mb-8">Terms of Service</h2>
                     
                     <div class="space-y-6 text-neutral-400 text-sm leading-relaxed">
                         <p class="font-medium text-white">Last updated: February 2026</p>
