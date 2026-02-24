@@ -16,7 +16,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    
     <style>
         :root {
             --bg: #000000;
@@ -31,8 +30,13 @@
             overflow-x: hidden;
         }
         
-        /* Swapped to the new handwritten font */
+        /* Clean formal/casual font for general headings */
         .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Handwritten font strictly for the RIFT brand name */
+        .font-brand {
             font-family: 'Permanent Marker', cursive;
         }
         
@@ -357,7 +361,7 @@
 
     <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-6 mix-blend-difference opacity-0 transition-opacity duration-700" id="navbar">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="#" class="font-display text-sm tracking-widest magnetic glow-text">
+            <a href="#" class="font-brand text-2xl tracking-widest magnetic glow-text">
                 RIFT
             </a>
             
@@ -392,7 +396,7 @@
                 One bot.<br>Infinite possibilities.
             </div>
 
-            <div class="sequence-line font-display" data-index="3" style="font-size: clamp(4rem, 12vw, 10rem); letter-spacing: -0.04em;">
+            <div class="sequence-line font-brand" data-index="3" style="font-size: clamp(4rem, 12vw, 10rem); letter-spacing: -0.04em;">
                 RIFT
             </div>
 
@@ -417,7 +421,7 @@
                     The Ultimate Discord Architect
                 </p>
                 
-                <h1 class="font-display text-6xl md:text-9xl mb-8 tracking-tight reveal-line glow-text" style="transition-delay: 0.1s;" id="main-title">
+                <h1 class="font-brand text-7xl md:text-[8rem] mb-8 tracking-tight reveal-line glow-text" style="transition-delay: 0.1s;" id="main-title">
                     RIFT
                 </h1>
                 
@@ -464,7 +468,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-xl mb-3">Hi-Fi Music</h3>
+                        <h3 class="font-display font-medium text-xl mb-3">Hi-Fi Music</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">SoundCloud & Bandcamp integration with Last.fm scrobbling, artist charts, and advanced audio filters.</p>
                     </div>
 
@@ -474,7 +478,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-xl mb-3">Server Architect</h3>
+                        <h3 class="font-display font-medium text-xl mb-3">Server Architect</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Design your entire server layout visually. Create channels, roles, and permissions in seconds with the Wizard.</p>
                     </div>
 
@@ -484,7 +488,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-xl mb-3">Moderation</h3>
+                        <h3 class="font-display font-medium text-xl mb-3">Moderation</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Advanced auto-mod, detailed logging, ticket systems, and seamless user verification flow.</p>
                     </div>
 
@@ -494,7 +498,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-xl mb-3">Social & Levels</h3>
+                        <h3 class="font-display font-medium text-xl mb-3">Social & Levels</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Engaging leveling system, reputation tracking, customizable profiles, and social interactions.</p>
                     </div>
 
@@ -504,7 +508,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-xl mb-3">Global Economy</h3>
+                        <h3 class="font-display font-medium text-xl mb-3">Global Economy</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Comprehensive economy with global currency, trading, player shops, and market simulation.</p>
                     </div>
 
@@ -514,7 +518,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-xl mb-3">Utilities</h3>
+                        <h3 class="font-display font-medium text-xl mb-3">Utilities</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Sticky messages, reminders, detailed server stats, and powerful configuration tools.</p>
                     </div>
 
@@ -531,7 +535,7 @@
         <footer class="section-glow py-12 px-6">
             <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-8">
-                    <span class="font-display text-sm tracking-widest glow-text">RIFT</span>
+                    <span class="font-brand text-2xl tracking-widest glow-text">RIFT</span>
                     <div class="flex gap-6 text-sm text-neutral-500">
                         <a href="#" id="privacy-trigger" class="hover:text-white transition-colors">Privacy</a>
                         <a href="#" id="terms-trigger" class="hover:text-white transition-colors">Terms</a>
@@ -556,7 +560,7 @@
                 </button>
 
                 <div class="p-8 md:p-12">
-                    <h2 class="font-display text-4xl mb-8">Privacy Policy</h2>
+                    <h2 class="font-display font-medium text-4xl mb-8">Privacy Policy</h2>
                     
                     <div class="space-y-6 text-neutral-400 text-sm leading-relaxed">
                         <p class="font-medium text-white">Last updated: February 2026</p>
@@ -619,7 +623,7 @@
                 </button>
 
                 <div class="p-8 md:p-12">
-                    <h2 class="font-display text-4xl mb-8">Terms of Service</h2>
+                    <h2 class="font-display font-medium text-4xl mb-8">Terms of Service</h2>
                     
                     <div class="space-y-6 text-neutral-400 text-sm leading-relaxed">
                         <p class="font-medium text-white">Last updated: February 2026</p>
