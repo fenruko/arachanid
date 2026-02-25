@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rift</title>
     
-    <link rel="icon" type="image/png" href="YOUR_IMAGE_URL_HERE">
+    <link rel="icon" type="image/png" href="https://cdn.discordapp.com/avatars/1329184069426348052/6af3960600da4c720bf76d5346b9068b.png?size=1024">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -344,6 +344,18 @@
             filter: drop-shadow(0 0 20px rgba(255,255,255,0.15));
             transform: scale(1.02);
         }
+
+        /* Status Ring Colors */
+        .status-online { background: #23a55a; box-shadow: 0 0 8px rgba(35, 165, 90, 0.4); animation: statusPulse 3s infinite; }
+        .status-idle { background: #f0b232; }
+        .status-dnd { background: #f23f43; }
+        .status-offline { background: #80848e; opacity: 0.5; }
+
+        @keyframes statusPulse {
+            0% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(35, 165, 90, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(35, 165, 90, 0); }
+        }
     </style>
 <base target="_blank">
 </head>
@@ -359,16 +371,13 @@
 
     <div class="noise"></div>
 
-    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-6 mix-blend-difference opacity-0 transition-opacity duration-700" id="navbar">
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-6 mix-blend-difference transition-opacity duration-700" id="navbar">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <a href="#" class="font-brand text-2xl tracking-widest magnetic glow-text">
                 RIFT
             </a>
             
             <div class="flex items-center gap-6">
-                <a href="dashboard.html" class="text-sm text-neutral-500 hover:text-white transition-colors magnetic">
-                    Dashboard
-                </a>
                 <a href="https://discord.gg/fe46sJY8KF" target="_blank" 
                    class="text-sm text-neutral-500 hover:text-white transition-colors magnetic">
                     Support
@@ -380,37 +389,6 @@
             </div>
         </div>
     </nav>
-
-    <div class="scroll-container" id="sequence-wrapper">
-        <div class="scroll-pinned">
-            
-            <div class="sequence-line font-display active" data-index="0">
-                Your server<br>deserves perfection.
-            </div>
-
-            <div class="sequence-line font-display" data-index="1">
-                Server Architect,<br>Music, Economy, AI.
-            </div>
-
-            <div class="sequence-line font-display" data-index="2">
-                One bot.<br>Infinite possibilities.
-            </div>
-
-            <div class="sequence-line font-brand" data-index="3" style="font-size: clamp(4rem, 12vw, 10rem); letter-spacing: -0.04em;">
-                RIFT
-            </div>
-
-            <div class="progress-indicator">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-
-            <div class="scroll-arrow" id="scroll-arrow">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 5v14M5 12l7 7 7-7"/>
-                </svg>
-            </div>
-        </div>
-    </div>
 
     <main class="relative">
         
@@ -533,16 +511,55 @@
         </section>
 
         <footer class="section-glow py-12 px-6">
-            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-8">
-                    <span class="font-brand text-2xl tracking-widest glow-text">RIFT</span>
-                    <div class="flex gap-6 text-sm text-neutral-500">
-                        <a href="#" id="privacy-trigger" class="hover:text-white transition-colors">Privacy</a>
-                        <a href="#" id="terms-trigger" class="hover:text-white transition-colors">Terms</a>
-                        <a href="https://discord.gg/fe46sJY8KF" target="_blank" class="hover:text-white transition-colors">Support</a>
+            <div class="max-w-6xl mx-auto flex flex-col gap-8">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-8">
+                        <span class="font-brand text-2xl tracking-widest glow-text">RIFT</span>
+                        <div class="flex gap-6 text-sm text-neutral-500">
+                            <a href="#" id="privacy-trigger" class="hover:text-white transition-colors">Privacy</a>
+                            <a href="#" id="terms-trigger" class="hover:text-white transition-colors">Terms</a>
+                            <a href="https://discord.gg/fe46sJY8KF" target="_blank" class="hover:text-white transition-colors">Support</a>
+                        </div>
                     </div>
+                    <div class="text-sm text-neutral-600" id="year"></div>
                 </div>
-                <div class="text-sm text-neutral-600" id="year"></div>
+
+                <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="text-sm text-neutral-500">
+                        <span class="text-white font-medium">Credits:</span>
+                    </div>
+                    
+                    <div class="flex flex-wrap justify-center gap-6 text-sm">
+                        <div class="flex items-center gap-2">
+                            <div class="relative p-[2px] rounded-full transition-all duration-500" id="status-fenruko">
+                                <img id="pfp-fenruko" src="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif" class="w-7 h-7 rounded-full bg-black" alt="fenruko">
+                            </div>
+                            <span class="text-neutral-400">fenruko <span class="text-neutral-600">(Creator)</span></span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <div class="relative p-[2px] rounded-full transition-all duration-500" id="status-blitzleaf">
+                                <img id="pfp-blitzleaf" src="https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png" class="w-7 h-7 rounded-full bg-black" alt="blitzleaf">
+                            </div>
+                            <span class="text-neutral-400">blitzleaf <span class="text-neutral-600">(Developer)</span></span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <div class="relative p-[2px] rounded-full transition-all duration-500" id="status-imclueless">
+                                <img id="pfp-imclueless" src="https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png" class="w-7 h-7 rounded-full bg-black" alt="imclueless.com">
+                            </div>
+                            <span class="text-neutral-400">imclueless.com <span class="text-neutral-600">(Designs)</span></span>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <div class="relative p-[2px] rounded-full transition-all duration-500" id="status-varkonia">
+                                <img id="pfp-varkonia" src="https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif" class="w-7 h-7 rounded-full bg-black" alt="varkonia">
+                            </div>
+                            <span class="text-neutral-400">varkonia <span class="text-neutral-600">(WebDev)</span></span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </footer>
     </main>
@@ -793,42 +810,6 @@
             });
         });
 
-        // Scroll Sequence
-        const lines = document.querySelectorAll('.sequence-line');
-        const progressBar = document.getElementById('progress-bar');
-        const navbar = document.getElementById('navbar');
-        const totalLines = lines.length;
-
-        lines[0].classList.add('active');
-
-        ScrollTrigger.create({
-            trigger: "#sequence-wrapper",
-            start: "top top",
-            end: "bottom bottom",
-            pin: ".scroll-pinned",
-            scrub: 0.8,
-            onUpdate: (self) => {
-                const progress = self.progress;
-                progressBar.style.width = (progress * 100) + '%';
-                
-                const currentIndex = Math.min(Math.floor(progress * totalLines), totalLines - 1);
-                
-                lines.forEach((line, index) => {
-                    if (index === currentIndex) {
-                        line.classList.add('active');
-                        line.classList.remove('fade-out');
-                    } else if (index < currentIndex) {
-                        line.classList.remove('active');
-                        line.classList.add('fade-out');
-                    } else {
-                        line.classList.remove('active', 'fade-out');
-                    }
-                });
-                
-                navbar.style.opacity = progress > 0.8 ? '1' : '0';
-            }
-        });
-
         // Main content reveals
         const revealElements = document.querySelectorAll('.reveal-line');
         revealElements.forEach(el => {
@@ -843,18 +824,6 @@
         // Year
         document.getElementById('year').textContent = `© ${new Date().getFullYear()}`;
         
-        // Scroll arrow fade animation
-        gsap.to("#scroll-arrow", {
-            opacity: 0,
-            ease: "none",
-            scrollTrigger: {
-                trigger: "#sequence-wrapper",
-                start: "top top",
-                end: "80% top",
-                scrub: true
-            }
-        });
-
         // Parallax
         gsap.to(".orb-1", {
             y: 200,
@@ -888,6 +857,47 @@
                 scrub: 1
             }
         });
+
+        // --- Live Status & PFP Fetching via Lanyard ---
+        // Important: Users must be in the Lanyard Discord server (discord.gg/lanyard) for this to track them!
+        const teamIds = {
+            'fenruko': '991663665373327420',
+            'blitzleaf': '1156262922117189743',
+            'imclueless': '352746408224555009',
+            'varkonia': '476059695027945472'
+        };
+
+        async function fetchLivePfps() {
+            for (const [name, id] of Object.entries(teamIds)) {
+                try {
+                    const res = await fetch(`https://api.lanyard.rest/v1/users/${id}`);
+                    const json = await res.json();
+                    
+                    if (json.success) {
+                        const user = json.data.discord_user;
+                        const status = json.data.discord_status;
+                        const statusEl = document.getElementById(`status-${name}`);
+                        
+                        // 1. Update Avatar
+                        if (user.avatar) {
+                            const ext = user.avatar.startsWith('a_') ? 'gif' : 'png';
+                            document.getElementById(`pfp-${name}`).src = 
+                                `https://cdn.discordapp.com/avatars/${id}/${user.avatar}.${ext}?size=128`;
+                        }
+
+                        // 2. Update Status Ring
+                        statusEl.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
+                        statusEl.classList.add(`status-${status}`);
+                    }
+                } catch (err) {
+                    console.error(`Status error for ${name}:`, err);
+                }
+            }
+        }
+
+        // Run the fetch immediately, then set an interval
+        fetchLivePfps();
+        setInterval(fetchLivePfps, 30000); // Refreshes every 30 seconds
     </script>
 </body>
 </html>
