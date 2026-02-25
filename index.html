@@ -860,12 +860,13 @@
 
         // --- Live Status & PFP Fetching via Lanyard ---
         // Important: Users must be in the Lanyard Discord server (discord.gg/lanyard) for this to track them!
-        const teamIds = {
-            'fenruko': '991663665373327420',
-            'blitzleaf': '1156262922117189743',
-            'imclueless': '352746408224555009',
-            'varkonia': '476059695027945472'
-        };
+        // --- Live Status & PFP Fetching via Lanyard ---
+	const teamIds = {
+    		'fenruko': { id: '834869554798395392', fallback: 'https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif' },
+    		'blitzleaf': { id: '1387045742484656249', fallback: 'https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png' },
+    		'imclueless': { id: '1382487227174617199', fallback: 'https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png' },
+    		'varkonia': { id: '1282109351007486045', fallback: 'https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif' }
+	};
 
         async function fetchLivePfps() {
             for (const [name, id] of Object.entries(teamIds)) {
