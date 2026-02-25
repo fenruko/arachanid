@@ -531,29 +531,29 @@
                     
                     <div class="flex flex-wrap justify-center gap-6 text-sm">
                         <div class="flex items-center gap-2">
-                            <div class="relative p-[2px] rounded-full transition-all duration-500" id="status-fenruko">
-                                <img id="pfp-fenruko" src="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif" class="w-7 h-7 rounded-full bg-black" alt="fenruko">
+                            <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline" id="status-fenruko">
+                                <img id="pfp-fenruko" src="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif" class="w-7 h-7 rounded-full bg-black object-cover" alt="fenruko">
                             </div>
                             <span class="text-neutral-400">fenruko <span class="text-neutral-600">(Creator)</span></span>
                         </div>
                         
                         <div class="flex items-center gap-2">
-                            <div class="relative p-[2px] rounded-full transition-all duration-500" id="status-blitzleaf">
-                                <img id="pfp-blitzleaf" src="https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png" class="w-7 h-7 rounded-full bg-black" alt="blitzleaf">
+                            <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline" id="status-blitzleaf">
+                                <img id="pfp-blitzleaf" src="https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png" class="w-7 h-7 rounded-full bg-black object-cover" alt="blitzleaf">
                             </div>
                             <span class="text-neutral-400">blitzleaf <span class="text-neutral-600">(Developer)</span></span>
                         </div>
                         
                         <div class="flex items-center gap-2">
-                            <div class="relative p-[2px] rounded-full transition-all duration-500" id="status-imclueless">
-                                <img id="pfp-imclueless" src="https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png" class="w-7 h-7 rounded-full bg-black" alt="imclueless.com">
+                            <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline" id="status-imclueless">
+                                <img id="pfp-imclueless" src="https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png" class="w-7 h-7 rounded-full bg-black object-cover" alt="imclueless.com">
                             </div>
                             <span class="text-neutral-400">imclueless.com <span class="text-neutral-600">(Designs)</span></span>
                         </div>
                         
                         <div class="flex items-center gap-2">
-                            <div class="relative p-[2px] rounded-full transition-all duration-500" id="status-varkonia">
-                                <img id="pfp-varkonia" src="https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif" class="w-7 h-7 rounded-full bg-black" alt="varkonia">
+                            <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline" id="status-varkonia">
+                                <img id="pfp-varkonia" src="https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif" class="w-7 h-7 rounded-full bg-black object-cover" alt="varkonia">
                             </div>
                             <span class="text-neutral-400">varkonia <span class="text-neutral-600">(WebDev)</span></span>
                         </div>
@@ -698,13 +698,12 @@
 
         function openPrivacy() {
             privacyModal.classList.remove('hidden');
-            // Small delay to allow display:block to apply before opacity transition
             setTimeout(() => {
                 privacyModal.classList.remove('opacity-0');
                 privacyContent.classList.remove('scale-95');
                 privacyContent.classList.add('scale-100');
             }, 10);
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closePrivacy() {
@@ -726,7 +725,6 @@
         privacyClose.addEventListener('click', closePrivacy);
         privacyBackdrop.addEventListener('click', closePrivacy);
 
-        // Escape key to close
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !privacyModal.classList.contains('hidden')) {
                 closePrivacy();
@@ -859,46 +857,59 @@
         });
 
         // --- Live Status & PFP Fetching via Lanyard ---
-        // Important: Users must be in the Lanyard Discord server (discord.gg/lanyard) for this to track them!
-        // --- Live Status & PFP Fetching via Lanyard ---
-	const teamIds = {
-    		'fenruko': { id: '834869554798395392', fallback: 'https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif' },
-    		'blitzleaf': { id: '1387045742484656249', fallback: 'https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png' },
-    		'imclueless': { id: '1382487227174617199', fallback: 'https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png' },
-    		'varkonia': { id: '1282109351007486045', fallback: 'https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif' }
-	};
+        // Uses the correct user IDs with a robust fallback system.
+        const teamIds = {
+            'fenruko': { id: '834869554798395392', fallback: 'https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif' },
+            'blitzleaf': { id: '1387045742484656249', fallback: 'https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png' },
+            'imclueless': { id: '1382487227174617199', fallback: 'https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png' },
+            'varkonia': { id: '1282109351007486045', fallback: 'https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif' }
+        };
 
         async function fetchLivePfps() {
-            for (const [name, id] of Object.entries(teamIds)) {
+            for (const [name, userData] of Object.entries(teamIds)) {
+                const imgEl = document.getElementById(`pfp-${name}`);
+                const statusEl = document.getElementById(`status-${name}`);
+
                 try {
-                    const res = await fetch(`https://api.lanyard.rest/v1/users/${id}`);
+                    // This now properly extracts ONLY the ID from the object
+                    const res = await fetch(`https://api.lanyard.rest/v1/users/${userData.id}`);
+                    
+                    if (!res.ok) {
+                        if (imgEl) imgEl.src = userData.fallback;
+                        if (statusEl) statusEl.classList.add('status-offline');
+                        continue; 
+                    }
+
                     const json = await res.json();
                     
                     if (json.success) {
                         const user = json.data.discord_user;
                         const status = json.data.discord_status;
-                        const statusEl = document.getElementById(`status-${name}`);
                         
                         // 1. Update Avatar
-                        if (user.avatar) {
+                        if (user.avatar && imgEl) {
                             const ext = user.avatar.startsWith('a_') ? 'gif' : 'png';
-                            document.getElementById(`pfp-${name}`).src = 
-                                `https://cdn.discordapp.com/avatars/${id}/${user.avatar}.${ext}?size=128`;
+                            imgEl.src = `https://cdn.discordapp.com/avatars/${userData.id}/${user.avatar}.${ext}?size=128`;
+                        } else if (imgEl) {
+                            imgEl.src = userData.fallback;
                         }
 
                         // 2. Update Status Ring
-                        statusEl.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
-                        statusEl.classList.add(`status-${status}`);
+                        if (statusEl) {
+                            statusEl.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
+                            statusEl.classList.add(`status-${status}`);
+                        }
                     }
                 } catch (err) {
-                    console.error(`Status error for ${name}:`, err);
+                    // If network fails completely
+                    if (imgEl) imgEl.src = userData.fallback;
+                    if (statusEl) statusEl.classList.add('status-offline');
                 }
             }
         }
 
-        // Run the fetch immediately, then set an interval
         fetchLivePfps();
-        setInterval(fetchLivePfps, 30000); // Refreshes every 30 seconds
+        setInterval(fetchLivePfps, 30000); // Check every 30 seconds
     </script>
 </body>
 </html>
