@@ -341,9 +341,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                         </svg>
                     </a>
-                    <a href="https://arachanid.readthedocs.io" target="_blank" 
+                    <a href="https://docs.rift.baby" target="_blank" 
                        class="px-8 py-4 border border-neutral-700 rounded-full font-medium hover:border-neutral-400 hover:bg-white/5 transition-all duration-300 magnetic text-neutral-300 btn-glow">
-                        Documentation
+                        docs.rift.baby
                     </a>
                     <a href="https://discord.gg/fe46sJY8KF" target="_blank" 
                        class="px-8 py-4 border border-neutral-700 rounded-full font-medium hover:border-neutral-400 hover:bg-white/5 transition-all duration-300 magnetic text-neutral-300 btn-glow">
@@ -491,9 +491,12 @@
                 <div class="p-8 md:p-12">
                     <h2 class="font-display font-medium text-4xl mb-8">Meet the Team</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- fenruko -->
                         <div class="feature-card rounded-xl p-6 flex flex-col gap-4">
                             <div class="flex items-center gap-4">
-                                <img id="team-pfp-fenruko" src="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif" class="w-16 h-16 rounded-full bg-black object-cover" alt="fenruko">
+                                <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline flex-shrink-0" id="team-status-fenruko">
+                                    <img id="team-pfp-fenruko" src="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif" class="w-16 h-16 rounded-full bg-black object-cover block" alt="fenruko">
+                                </div>
                                 <div>
                                     <h3 class="text-xl text-white font-medium">fenruko</h3>
                                     <p class="text-sm text-neutral-400">Creator / Project Lead</p>
@@ -502,9 +505,12 @@
                             <div id="spotify-fenruko" class="text-sm text-neutral-500 mt-2 truncate">Fetching status...</div>
                         </div>
 
+                        <!-- blitzleaf -->
                         <div class="feature-card rounded-xl p-6 flex flex-col gap-4">
                             <div class="flex items-center gap-4">
-                                <img id="team-pfp-blitzleaf" src="https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png" class="w-16 h-16 rounded-full bg-black object-cover" alt="blitzleaf">
+                                <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline flex-shrink-0" id="team-status-blitzleaf">
+                                    <img id="team-pfp-blitzleaf" src="https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png" class="w-16 h-16 rounded-full bg-black object-cover block" alt="blitzleaf">
+                                </div>
                                 <div>
                                     <h3 class="text-xl text-white font-medium">blitzleaf</h3>
                                     <p class="text-sm text-neutral-400">Core Developer</p>
@@ -677,6 +683,13 @@
                             statusEl.classList.add(`status-${status}`);
                         }
 
+                        // Also update team modal status ring
+                        const teamStatusEl = document.getElementById(`team-status-${name}`);
+                        if (teamStatusEl) {
+                            teamStatusEl.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
+                            teamStatusEl.classList.add(`status-${status}`);
+                        }
+
                         if (spotifyEl) {
                             let statusText = status === 'dnd' ? 'Do Not Disturb' : status;
                             if (json.data.spotify) {
@@ -688,6 +701,8 @@
                     }
                 } catch (err) {
                     if (statusEl) statusEl.classList.add('status-offline');
+                    const teamStatusEl = document.getElementById(`team-status-${name}`);
+                    if (teamStatusEl) teamStatusEl.classList.add('status-offline');
                 }
             }
         }
