@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rift</title>
-    
+
     <link rel="icon" type="image/png" href="https://cdn.discordapp.com/avatars/1329184069426348052/6af3960600da4c720bf76d5346b9068b.png?size=1024">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Permanent+Marker&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
@@ -22,14 +22,14 @@
             --text: #ffffff;
             --border: rgba(255, 255, 255, 0.1);
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text);
             overflow-x: hidden;
         }
-        
+
         .font-display {
             font-family: 'Space Grotesk', sans-serif;
         }
@@ -37,7 +37,7 @@
         .font-brand {
             font-family: 'Permanent Marker', cursive;
         }
-        
+
         .gradient-bg {
             position: fixed;
             top: 0;
@@ -49,7 +49,7 @@
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
         }
-        
+
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             25% { background-position: 50% 100%; }
@@ -57,7 +57,7 @@
             75% { background-position: 50% 0%; }
             100% { background-position: 0% 50%; }
         }
-        
+
         .orb {
             position: fixed;
             border-radius: 50%;
@@ -65,7 +65,7 @@
             z-index: -1;
             pointer-events: none;
         }
-        
+
         .orb-1 {
             width: 600px;
             height: 600px;
@@ -74,7 +74,7 @@
             right: -200px;
             animation: floatOrb1 20s ease-in-out infinite;
         }
-        
+
         .orb-2 {
             width: 500px;
             height: 500px;
@@ -83,7 +83,7 @@
             left: -150px;
             animation: floatOrb2 25s ease-in-out infinite;
         }
-        
+
         .orb-3 {
             width: 400px;
             height: 400px;
@@ -94,24 +94,24 @@
             margin-top: -200px;
             animation: floatOrb3 18s ease-in-out infinite;
         }
-        
+
         @keyframes floatOrb1 {
             0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
             33% { transform: translate3d(-50px, 30px, 0) scale(1.1); }
             66% { transform: translate3d(30px, -20px, 0) scale(0.9); }
         }
-        
+
         @keyframes floatOrb2 {
             0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
             33% { transform: translate3d(40px, -40px, 0) scale(1.2); }
             66% { transform: translate3d(-30px, 20px, 0) scale(0.8); }
         }
-        
+
         @keyframes floatOrb3 {
             0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
             50% { transform: translate3d(40px, -40px, 0) scale(1.3); }
         }
-        
+
         .grid-pattern {
             position: fixed;
             top: 0;
@@ -126,7 +126,7 @@
             background-size: 60px 60px;
             pointer-events: none;
         }
-        
+
         .noise {
             position: fixed;
             top: 0;
@@ -139,97 +139,32 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        .scroll-container {
-            position: relative;
-            height: 400vh;
-        }
-
-        .scroll-pinned {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .sequence-line {
-            position: absolute;
-            text-align: center;
-            padding: 0 2rem;
-            font-size: clamp(1.5rem, 5vw, 4rem);
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            line-height: 1.2;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            pointer-events: none;
-            text-shadow: 0 0 60px rgba(255,255,255,0.1);
-        }
-
-        .sequence-line.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .sequence-line.fade-out {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-
-        .progress-indicator {
-            position: absolute;
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 1px;
-            background: #222;
-            opacity: 0;
-            animation: fadeIn 1s 0.5s forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: white;
-            transition: width 0.1s linear;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
-
         .feature-card {
             background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
             transition: transform 0.4s ease, background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
             backdrop-filter: blur(10px);
         }
-        
+
         .feature-card:hover {
             border-color: #444;
             background: rgba(255,255,255,0.04);
             transform: translateY(-4px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(255,255,255,0.03);
         }
-        
+
         ::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: var(--bg);
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: #333;
         }
-        
+
         ::-webkit-scrollbar-thumb:hover {
             background: #444;
         }
@@ -238,20 +173,20 @@
             clip-path: inset(0 0 100% 0);
             transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
         }
-        
+
         .reveal-line.visible {
             clip-path: inset(0 0 0 0);
         }
-        
+
         .glow-text {
             text-shadow: 0 0 40px rgba(255,255,255,0.15);
         }
-        
+
         .btn-glow {
             position: relative;
             overflow: hidden;
         }
-        
+
         .btn-glow::before {
             content: '';
             position: absolute;
@@ -263,12 +198,11 @@
             transition: transform 0.5s ease;
             transform: translateX(0);
         }
-        
+
         .btn-glow:hover::before {
             transform: translateX(200%);
         }
 
-        /* --- Liquid Button CSS --- */
         .btn-liquid {
             position: relative;
             overflow: hidden;
@@ -297,12 +231,11 @@
             box-shadow: 0 0 20px rgba(255,255,255,0.05);
             color: #fff;
         }
-        /* ----------------------- */
-        
+
         .section-glow {
             position: relative;
         }
-        
+
         .section-glow::before {
             content: '';
             position: absolute;
@@ -313,47 +246,30 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
-        
+
         .icon-glow {
             transition: all 0.4s ease;
         }
-        
+
         .feature-card:hover .icon-glow {
             filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
             transform: scale(1.1);
-        }
-        
-        .scroll-arrow {
-            position: absolute;
-            bottom: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            opacity: 0.7;
-            animation: bounce 2s ease-in-out infinite;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(8px); }
         }
 
         .pulse-dot {
             animation: pulse 2s ease-in-out infinite;
         }
-        
+
         @keyframes pulse {
             0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
             50% { opacity: 0.8; box-shadow: 0 0 0 8px rgba(255,255,255,0); }
         }
-        
+
         .widget-glow {
             transition: all 0.3s ease;
             filter: drop-shadow(0 0 0 rgba(255,255,255,0));
         }
-        
+
         .widget-glow:hover {
             filter: drop-shadow(0 0 20px rgba(255,255,255,0.15));
             transform: scale(1.02);
@@ -362,7 +278,7 @@
         /* Status Ring Colors */
         .status-online { background: #23a55a; box-shadow: 0 0 8px rgba(35, 165, 90, 0.4); animation: statusPulse 3s infinite; }
         .status-idle { background: #f0b232; }
-        .status-dnd { background: #f23f43; }
+        .status-dnd { background: #f23f43; } /* Represents Do Not Disturb */
         .status-offline { background: #80848e; opacity: 0.5; }
 
         @keyframes statusPulse {
@@ -376,13 +292,10 @@
 <body class="antialiased selection:bg-white selection:text-black">
 
     <div class="gradient-bg"></div>
-    
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
-    
     <div class="grid-pattern"></div>
-
     <div class="noise"></div>
 
     <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-6 mix-blend-difference transition-opacity duration-700" id="navbar">
@@ -390,7 +303,7 @@
             <a href="#" class="font-brand text-2xl tracking-widest magnetic glow-text">
                 RIFT
             </a>
-            
+
             <div class="flex items-center gap-6">
                 <a href="https://discord.gg/fe46sJY8KF" target="_blank" 
                    class="text-sm text-neutral-500 hover:text-white transition-colors magnetic">
@@ -405,22 +318,21 @@
     </nav>
 
     <main class="relative">
-        
+
         <section class="min-h-screen flex items-center justify-center px-6 section-glow">
             <div class="max-w-5xl mx-auto text-center">
-                
                 <p class="text-neutral-500 text-sm uppercase tracking-widest mb-8 reveal-line" id="tagline">
                     The Ultimate Discord Bot
                 </p>
-                
+
                 <h1 class="font-brand text-7xl md:text-[8rem] mb-8 tracking-tight reveal-line glow-text" style="transition-delay: 0.1s;" id="main-title">
                     RIFT
                 </h1>
-                
+
                 <p class="text-neutral-400 text-lg md:text-xl max-w-xl mx-auto mb-12 leading-relaxed reveal-line" style="transition-delay: 0.2s;" id="desc">
                     Visual server builder, Hi-Fi music, auto-moderation & global economy.
                 </p>
-                
+
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal-line flex-wrap" style="transition-delay: 0.3s;" id="buttons">
                     <a href="https://discord.com/oauth2/authorize?client_id=1329184069426348052&permissions=5076723787231222&integration_type=0&scope=bot" target="_blank" 
                        class="group px-8 py-4 bg-white text-black rounded-full font-medium magnetic inline-flex items-center gap-2 hover:bg-neutral-200 transition-colors btn-glow">
@@ -457,7 +369,7 @@
         <section class="py-32 px-6 section-glow">
             <div class="max-w-6xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    
+
                     <div class="feature-card rounded-2xl p-8 group">
                         <div class="mb-8 text-neutral-500 group-hover:text-white transition-colors duration-500">
                             <svg class="w-6 h-6 icon-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -517,7 +429,6 @@
                         <h3 class="font-display font-medium text-xl mb-3">Utilities</h3>
                         <p class="text-neutral-500 text-sm leading-relaxed">Sticky messages, reminders, detailed server stats, and powerful configuration tools.</p>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -546,20 +457,13 @@
                     <div class="text-sm text-neutral-500">
                         <span class="text-white font-medium">Credits:</span>
                     </div>
-                    
+
                     <div class="flex flex-wrap justify-center gap-6 text-sm">
                         <div class="flex items-center gap-2">
                             <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline" id="status-fenruko">
                                 <img id="pfp-fenruko" src="https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif" class="w-7 h-7 rounded-full bg-black object-cover" alt="fenruko">
                             </div>
                             <span class="text-neutral-400">fenruko <span class="text-neutral-600">(Creator)</span></span>
-                        </div>
-                        
-                        <div class="flex items-center gap-2">
-                            <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline" id="status-imclueless">
-                                <img id="pfp-imclueless" src="https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png" class="w-7 h-7 rounded-full bg-black object-cover" alt="imclueless.com">
-                            </div>
-                            <span class="text-neutral-400">imclueless.com <span class="text-neutral-600">(Designs)</span></span>
                         </div>
 
                         <div class="flex items-center gap-2">
@@ -568,15 +472,7 @@
                             </div>
                             <span class="text-neutral-400">blitzleaf <span class="text-neutral-600">(Developer)</span></span>
                         </div>
-                        
-                        <div class="flex items-center gap-2">
-                            <div class="relative p-[2px] rounded-full transition-all duration-500 status-offline" id="status-varkonia">
-                                <img id="pfp-varkonia" src="https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif" class="w-7 h-7 rounded-full bg-black object-cover" alt="varkonia">
-                            </div>
-                            <span class="text-neutral-400">varkonia <span class="text-neutral-600">(WebDev)</span></span>
-                        </div>
                     </div>
-
                 </div>
             </div>
         </footer>
@@ -584,10 +480,8 @@
 
     <div id="team-modal" class="fixed inset-0 z-[9999] hidden opacity-0 transition-opacity duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="team-backdrop"></div>
-        
         <div class="relative w-full h-full flex items-center justify-center p-4">
             <div class="bg-black/90 border border-white/10 rounded-2xl w-full max-w-4xl max-h-[80vh] overflow-y-auto relative transform scale-95 transition-transform duration-300" id="team-content">
-                
                 <button id="team-close" class="absolute top-4 right-4 text-neutral-500 hover:text-white transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -596,7 +490,6 @@
 
                 <div class="p-8 md:p-12">
                     <h2 class="font-display font-medium text-4xl mb-8">Meet the Team</h2>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="feature-card rounded-xl p-6 flex flex-col gap-4">
                             <div class="flex items-center gap-4">
@@ -611,17 +504,6 @@
 
                         <div class="feature-card rounded-xl p-6 flex flex-col gap-4">
                             <div class="flex items-center gap-4">
-                                <img id="team-pfp-imclueless" src="https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png" class="w-16 h-16 rounded-full bg-black object-cover" alt="imclueless.com">
-                                <div>
-                                    <h3 class="text-xl text-white font-medium">imclueless.com</h3>
-                                    <p class="text-sm text-neutral-400">Designs & Visuals</p>
-                                </div>
-                            </div>
-                            <div id="spotify-imclueless" class="text-sm text-neutral-500 mt-2 truncate">Fetching status...</div>
-                        </div>
-
-                        <div class="feature-card rounded-xl p-6 flex flex-col gap-4">
-                            <div class="flex items-center gap-4">
                                 <img id="team-pfp-blitzleaf" src="https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png" class="w-16 h-16 rounded-full bg-black object-cover" alt="blitzleaf">
                                 <div>
                                     <h3 class="text-xl text-white font-medium">blitzleaf</h3>
@@ -629,17 +511,6 @@
                                 </div>
                             </div>
                             <div id="spotify-blitzleaf" class="text-sm text-neutral-500 mt-2 truncate">Fetching status...</div>
-                        </div>
-
-                        <div class="feature-card rounded-xl p-6 flex flex-col gap-4">
-                            <div class="flex items-center gap-4">
-                                <img id="team-pfp-varkonia" src="https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif" class="w-16 h-16 rounded-full bg-black object-cover" alt="varkonia">
-                                <div>
-                                    <h3 class="text-xl text-white font-medium">varkonia</h3>
-                                    <p class="text-sm text-neutral-400">Web Developer</p>
-                                </div>
-                            </div>
-                            <div id="spotify-varkonia" class="text-sm text-neutral-500 mt-2 truncate">Fetching status...</div>
                         </div>
                     </div>
                 </div>
@@ -649,60 +520,27 @@
 
     <div id="privacy-modal" class="fixed inset-0 z-[9999] hidden opacity-0 transition-opacity duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="privacy-backdrop"></div>
-        
         <div class="relative w-full h-full flex items-center justify-center p-4">
             <div class="bg-black/90 border border-white/10 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto relative transform scale-95 transition-transform duration-300" id="privacy-content">
-                
                 <button id="privacy-close" class="absolute top-4 right-4 text-neutral-500 hover:text-white transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
-
                 <div class="p-8 md:p-12">
                     <h2 class="font-display font-medium text-4xl mb-8">Privacy Policy</h2>
-                    
                     <div class="space-y-6 text-neutral-400 text-sm leading-relaxed">
                         <p class="font-medium text-white">Last updated: February 2026</p>
-
                         <div>
                             <h3 class="text-white font-medium mb-2">1. Introduction</h3>
-                            <p>Rift ("we", "us", or "our") values your privacy. This Privacy Policy explains how we collect, use, and protect your information when you use our Discord bot and services.</p>
+                            <p>Rift ("we", "us", or "our") values your privacy. This Privacy Policy explains how we collect, use, and protect your information.</p>
                         </div>
-
                         <div>
                             <h3 class="text-white font-medium mb-2">2. Data We Collect</h3>
                             <ul class="list-disc pl-5 space-y-1">
-                                <li><strong>User Data:</strong> Discord User IDs, usernames, and avatars to identify users and track economy/leveling progress.</li>
-                                <li><strong>Server Data:</strong> Guild IDs, channel IDs, and role IDs for configuration and settings.</li>
-                                <li><strong>Usage Data:</strong> Command usage statistics and error logs to improve service stability.</li>
-                                <li><strong>Message Content:</strong> We do not persistently store message content. Messages may be temporarily processed for auto-moderation commands but are discarded immediately after processing.</li>
+                                <li><strong>User Data:</strong> Discord User IDs, usernames, and avatars.</li>
+                                <li><strong>Server Data:</strong> Guild IDs and role IDs for configuration.</li>
                             </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">3. How We Use Data</h3>
-                            <p>We use the collected data to:</p>
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li>Provide core bot functionality (economy, leveling, moderation).</li>
-                                <li>Maintain user preferences and server configurations.</li>
-                                <li>Ensure the security and stability of our services.</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">4. Data Storage & Security</h3>
-                            <p>Data is stored securely in our databases. We take reasonable measures to protect your information from unauthorized access, alteration, or destruction.</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">5. Data Sharing</h3>
-                            <p>We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties. This does not include trusted third parties who assist us in operating our website or serving you (e.g., hosting providers), so long as those parties agree to keep this information confidential.</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">6. Your Rights</h3>
-                            <p>You have the right to request access to, correction of, or deletion of your personal data. To request data deletion, please join our <a href="https://discord.gg/fe46sJY8KF" class="text-white underline hover:no-underline">Support Server</a> and open a ticket.</p>
                         </div>
                     </div>
                 </div>
@@ -712,56 +550,20 @@
 
     <div id="terms-modal" class="fixed inset-0 z-[9999] hidden opacity-0 transition-opacity duration-300">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="terms-backdrop"></div>
-        
         <div class="relative w-full h-full flex items-center justify-center p-4">
             <div class="bg-black/90 border border-white/10 rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto relative transform scale-95 transition-transform duration-300" id="terms-content">
-                
                 <button id="terms-close" class="absolute top-4 right-4 text-neutral-500 hover:text-white transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
-
                 <div class="p-8 md:p-12">
                     <h2 class="font-display font-medium text-4xl mb-8">Terms of Service</h2>
-                    
                     <div class="space-y-6 text-neutral-400 text-sm leading-relaxed">
                         <p class="font-medium text-white">Last updated: February 2026</p>
-
                         <div>
                             <h3 class="text-white font-medium mb-2">1. Acceptance of Terms</h3>
-                            <p>By inviting Rift ("the Bot") to your Discord server or using its features, you agree to be bound by these Terms of Service. If you do not agree, you may not use the Bot.</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">2. Usage License</h3>
-                            <p>We grant you a limited, non-exclusive, non-transferable license to use Rift for personal, non-commercial purposes within the Discord platform, subject to these Terms.</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">3. User Conduct</h3>
-                            <p>You agree not to use the Bot to:</p>
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li>Violate Discord's Terms of Service or Community Guidelines.</li>
-                                <li>Promote illegal activities, hate speech, or harassment.</li>
-                                <li>Exploit bugs or vulnerabilities (please report them instead).</li>
-                                <li>Spam commands or intentionally degrade the Bot's performance.</li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">4. Availability & Service</h3>
-                            <p>We strive to maintain high availability but do not guarantee 100% uptime. We reserve the right to modify, suspend, or discontinue any part of the service at any time without notice.</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">5. Termination</h3>
-                            <p>We reserve the right to ban any user or server from using Rift at our sole discretion, without prior notice, for violation of these Terms or for any other reason.</p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-white font-medium mb-2">6. Disclaimer</h3>
-                            <p>The Bot is provided "as is" without warranty of any kind. We are not liable for any damages arising from the use or inability to use the Bot.</p>
+                            <p>By using Rift, you agree to these Terms. If you do not agree, you may not use the Bot.</p>
                         </div>
                     </div>
                 </div>
@@ -772,7 +574,6 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Generic Modal Logic Function
         function setupModal(triggerId, modalId, backdropId, closeId, contentId) {
             const trigger = document.getElementById(triggerId);
             const modal = document.getElementById(modalId);
@@ -796,7 +597,6 @@
                 modal.classList.add('opacity-0');
                 content.classList.remove('scale-100');
                 content.classList.add('scale-95');
-                
                 setTimeout(() => {
                     modal.classList.add('hidden');
                     document.body.style.overflow = '';
@@ -810,7 +610,6 @@
 
             closeBtn.addEventListener('click', closeModal);
             backdrop.addEventListener('click', closeModal);
-
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
                     closeModal();
@@ -822,42 +621,17 @@
         setupModal('terms-trigger', 'terms-modal', 'terms-backdrop', 'terms-close', 'terms-content');
         setupModal('team-trigger', 'team-modal', 'team-backdrop', 'team-close', 'team-content');
 
-        // Magnetic Buttons
         document.querySelectorAll('.magnetic').forEach(btn => {
             let rect = btn.getBoundingClientRect();
-            
-            btn.addEventListener('mouseenter', () => {
-                rect = btn.getBoundingClientRect();
-            });
-            
-            window.addEventListener('resize', () => {
-                rect = btn.getBoundingClientRect();
-            });
-
+            btn.addEventListener('mouseenter', () => rect = btn.getBoundingClientRect());
             btn.addEventListener('mousemove', (e) => {
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-                
-                gsap.to(btn, {
-                    x: x * 0.2,
-                    y: y * 0.2,
-                    duration: 0.3,
-                    ease: "power2.out",
-                    overwrite: "auto"
-                });
+                gsap.to(btn, { x: x * 0.2, y: y * 0.2, duration: 0.3, ease: "power2.out", overwrite: "auto" });
             });
-
-            btn.addEventListener('mouseleave', () => {
-                gsap.to(btn, {
-                    x: 0,
-                    y: 0,
-                    duration: 0.5,
-                    ease: "elastic.out(1, 0.3)"
-                });
-            });
+            btn.addEventListener('mouseleave', () => gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" }));
         });
 
-        // Main content reveals
         const revealElements = document.querySelectorAll('.reveal-line');
         revealElements.forEach(el => {
             ScrollTrigger.create({
@@ -868,79 +642,29 @@
             });
         });
 
-        // Year
         document.getElementById('year').textContent = `© ${new Date().getFullYear()}`;
-        
-        // Parallax
-        gsap.to(".orb-1", {
-            y: 200,
-            ease: "none",
-            scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1
-            }
-        });
-        
-        gsap.to(".orb-2", {
-            y: -150, 
-            ease: "none",
-            scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1
-            }
-        });
 
-        gsap.to(".orb-3", {
-            y: 100, 
-            ease: "none",
-            scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1
-            }
-        });
-
-        // --- Live Status & PFP Fetching via Lanyard ---
+        // Live Status Logic
         const teamIds = {
             'fenruko': { id: '834869554798395392', fallback: 'https://cdn.discordapp.com/avatars/991663665373327420/a_52296c00d5a49141075727195822365a.gif' },
-            'blitzleaf': { id: '1387045742484656249', fallback: 'https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png' },
-            'imclueless': { id: '1382487227174617199', fallback: 'https://cdn.discordapp.com/avatars/352746408224555009/411352e4647318356c9a941566872950.png' },
-            'varkonia': { id: '1282109351007486045', fallback: 'https://cdn.discordapp.com/avatars/476059695027945472/a_86144865108422116040857500582046.gif' }
+            'blitzleaf': { id: '1387045742484656249', fallback: 'https://cdn.discordapp.com/avatars/1156262922117189743/b8782f059286d9978696803737089b37.png' }
         };
 
         async function fetchLivePfps() {
             for (const [name, userData] of Object.entries(teamIds)) {
-                // Main Footer Profile
                 const imgEl = document.getElementById(`pfp-${name}`);
                 const statusEl = document.getElementById(`status-${name}`);
-                
-                // Modal Profile & Spotify Data
                 const teamImgEl = document.getElementById(`team-pfp-${name}`);
                 const spotifyEl = document.getElementById(`spotify-${name}`);
 
                 try {
                     const res = await fetch(`https://api.lanyard.rest/v1/users/${userData.id}`);
-                    
-                    if (!res.ok) {
-                        if (imgEl) imgEl.src = userData.fallback;
-                        if (teamImgEl) teamImgEl.src = userData.fallback;
-                        if (statusEl) statusEl.classList.add('status-offline');
-                        if (spotifyEl) spotifyEl.innerHTML = '<span class="text-neutral-500">Currently Offline</span>';
-                        continue; 
-                    }
-
+                    if (!res.ok) throw new Error();
                     const json = await res.json();
-                    
+
                     if (json.success) {
                         const user = json.data.discord_user;
                         const status = json.data.discord_status;
-                        
-                        // 1. Update Avatars
                         const avatarUrl = user.avatar 
                             ? `https://cdn.discordapp.com/avatars/${userData.id}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}?size=128` 
                             : userData.fallback;
@@ -948,42 +672,28 @@
                         if (imgEl) imgEl.src = avatarUrl;
                         if (teamImgEl) teamImgEl.src = avatarUrl;
 
-                        // 2. Update Status Ring
                         if (statusEl) {
                             statusEl.classList.remove('status-online', 'status-idle', 'status-dnd', 'status-offline');
                             statusEl.classList.add(`status-${status}`);
                         }
 
-                        // 3. Update Spotify/Custom Status in Team Modal
                         if (spotifyEl) {
+                            let statusText = status === 'dnd' ? 'Do Not Disturb' : status;
                             if (json.data.spotify) {
-                                spotifyEl.innerHTML = `<span class="text-green-500 font-medium">♫</span> Listening to <strong>${json.data.spotify.song}</strong> by ${json.data.spotify.artist}`;
-                            } else if (json.data.activities && json.data.activities.length > 0) {
-                                // Exclude custom status if another primary activity is active, or just show the first valid one
-                                const activity = json.data.activities.find(a => a.type === 0 || a.type === 4); 
-                                if (activity && activity.name === "Custom Status") {
-                                    spotifyEl.innerHTML = `<span>${activity.state || 'Online'}</span>`;
-                                } else if (activity) {
-                                    spotifyEl.innerHTML = `<span class="text-blue-400">❖</span> Playing <strong>${activity.name}</strong>`;
-                                } else {
-                                    spotifyEl.innerHTML = `<span class="text-neutral-500 capitalize">Status: ${status}</span>`;
-                                }
+                                spotifyEl.innerHTML = `<span class="text-green-500 font-medium">♫</span> Listening to <strong>${json.data.spotify.song}</strong>`;
                             } else {
-                                spotifyEl.innerHTML = `<span class="text-neutral-500 capitalize">Status: ${status}</span>`;
+                                spotifyEl.innerHTML = `<span class="text-neutral-500 capitalize">Status: ${statusText}</span>`;
                             }
                         }
                     }
                 } catch (err) {
-                    if (imgEl) imgEl.src = userData.fallback;
-                    if (teamImgEl) teamImgEl.src = userData.fallback;
                     if (statusEl) statusEl.classList.add('status-offline');
-                    if (spotifyEl) spotifyEl.innerHTML = '<span class="text-neutral-500">Currently Offline</span>';
                 }
             }
         }
 
         fetchLivePfps();
-        setInterval(fetchLivePfps, 15000); // Check every 15 seconds to keep Spotify synced better
+        setInterval(fetchLivePfps, 15000);
     </script>
 </body>
 </html>
